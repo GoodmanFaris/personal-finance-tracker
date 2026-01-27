@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16
+    container_name: pft_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: pft
+      POSTGRES_USER: pft_user
+      POSTGRES_PASSWORD: farislindov003
+    ports:
+      - "5433:5432"
+    volumes:
+      - pft_pgdata:/var/lib/postgresql/data
+
+volumes:
+  pft_pgdata:
