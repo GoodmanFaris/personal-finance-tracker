@@ -1,6 +1,6 @@
 from typing import Optional, List
 from sqlmodel import Session, select
-from app.models.user import Category
+from app.models.category import Category
 
 class CategoryRepository:
     def __init__(self, session: Session):
