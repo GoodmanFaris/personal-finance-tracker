@@ -6,3 +6,4 @@ def validate_month(month: str) -> str:
     if not _MONTH_RE.match(month):
         raise ValueError("month must be in format YYYY-MM (e.g. 2026-01)")
     return month
+
