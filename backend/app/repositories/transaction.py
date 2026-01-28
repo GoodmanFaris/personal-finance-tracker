@@ -32,6 +32,11 @@ class TransactionRepository:
         statement = select(Transaction).where(Transaction.month == month, Transaction.user_id == user_id).order_by(Transaction.date)
         results = self.session.exec(statement).all()
         return results
+    
+    def get_by_desc(self, *, description: str, user_id: int) -> List[Transaction]:
+        statement = select(Transaction).where(Transaction.description.contains(description), Transaction.user_id == user_id).order_by(Transaction.id)
+        results = self.session.exec(statement).all()
+        return results
 
     def update(self, transaction: Transaction) -> Transaction:
         self.session.add(transaction)
@@ -39,6 +44,7 @@ class TransactionRepository:
         self.session.refresh(transaction)
         return transaction
 
-    def delete(self, transaction: Transaction) -> None:
+    def delete(self, *, transaction: Transaction) -> Transaction:
         self.session.delete(transaction)
         self.session.commit()
+        return transaction
