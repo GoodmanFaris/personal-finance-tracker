@@ -40,3 +40,21 @@ class IncomeService:
             obj.month = payload.month
 
         return self.repository.update(obj)
+    
+    def list_incomes_by_time_period(self, *, user_id: int, date_from: str, date_to: str) -> list[IncomeRead]:
+        validate_month(date_from)
+        validate_month(date_to)
+        
+        incomes = []
+        current_month = date_from
+        while current_month <= date_to:
+            monthly_incomes = self.repository.get_by_month(month=current_month, user_id=user_id)
+            incomes.extend(monthly_incomes)
+            year, month = map(int, current_month.split("-"))
+            if month == 12:
+                month = 1
+                year += 1
+            else:
+                month += 1
+            current_month = f"{year:04d}-{month:02d}"
+        return incomes
