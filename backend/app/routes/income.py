@@ -9,7 +9,7 @@ CURRENT_USER_ID = 1  # Placeholder for authenticated user ID
 
 router = APIRouter(prefix="/income", tags=["income"])
 
-@router.post("/", response_model=IncomeRead)
+@router.post("/", response_model=IncomeRead, status_code=201)
 def create_income(
     income_data: IncomeCreate,
     session: Session = Depends(get_session)
@@ -29,16 +29,22 @@ def get_income(
         raise HTTPException(status_code=404, detail="Income not found")
     return income
 
-@router.get("/month/{month}", response_model=list[IncomeRead])
-def get_income_by_month(
-    month: str,
-    session: Session = Depends(get_session)
-):
-    service = IncomeService(session)
-    incomes = service.get_by_month(month=month, user_id=CURRENT_USER_ID)
-    return incomes
 
-@router.put("/month/{month}", response_model=IncomeRead)
+
+@router.get("/month/{month}", response_model=IncomeRead)
+def get_income(
+    month: str,
+    session: Session = Depends(get_session),
+):
+
+    service = IncomeService(session)
+    return service.get_income(
+        user_id=CURRENT_USER_ID,
+        month=month,
+    )
+
+
+@router.put("/{month}", response_model=IncomeRead)
 def upsert_income_by_month(
     month: str,
     income_data: IncomeCreate,
@@ -52,7 +58,7 @@ def upsert_income_by_month(
     )
     return income
 
-@router.put("/{income_id}", response_model=IncomeRead)
+@router.put("/id/{income_id}", response_model=IncomeRead)
 def update_income(
     income_id: int,
     income_data: IncomeUpdate,
