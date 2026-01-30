@@ -19,11 +19,11 @@ class SummaryRepository:
         results = self.session.exec(statement).all()
         return results
     
-    def get_transactions_by_range(self, *, user_id: int, start_month: str, end_month: str ) -> List[Transaction]:
+    def get_transactions_by_range(self, *, user_id: int, start_date: str, end_date: str ) -> List[Transaction]:
         statement = select(Transaction).where(
             Transaction.user_id == user_id,
-            Transaction.month >= start_month,
-            Transaction.month <= end_month
+            Transaction.date >= start_date,
+            Transaction.date <= end_date
         ).order_by(Transaction.date)
         results = self.session.exec(statement).all()
         return results
