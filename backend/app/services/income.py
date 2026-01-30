@@ -17,7 +17,7 @@ class IncomeService:
             raise HTTPException(status_code=404, detail="Income record not found")
         return obj
 
-    def create_income(self, *, user_id: int, income_in: IncomeCreate) -> IncomeRead:
+    def create(self, *, user_id: int, income_in: IncomeCreate) -> IncomeRead:
         if income_in.amount < 0:
             raise HTTPException(status_code=400, detail="Income amount cannot be negative")
         
@@ -27,8 +27,22 @@ class IncomeService:
 
         
         return self.repository.create(data=income_in.dict(), user_id=user_id)
+    
+    def get_by_id(self, *, user_id: int, income_id: int) -> IncomeRead:
+        return self.get_or_404(user_id=user_id, income_id=income_id)
+    
+    def get_by_month(self, *, user_id: int, month: str) -> list[IncomeRead]:
+        validate_month(month)
+        return self.repository.get_by_month(month=month, user_id=user_id)
+    
+    def upsert_by_month(self, *, user_id: int, month: str, amount: float) -> IncomeRead:
+        if amount < 0:
+            raise HTTPException(status_code=400, detail="Income amount cannot be negative")
+        
+        validate_month(month)
+        return self.repository.upsert_by_month(month=month, amount=amount, user_id=user_id)
 
-    def update_income(self, *, user_id: int, income_id: int, payload: IncomeUpdate) -> IncomeRead:
+    def update(self, *, user_id: int, income_id: int, payload: IncomeUpdate) -> IncomeRead:
         obj = self.get_or_404(user_id=user_id, income_id=income_id)
 
         if payload.amount is not None:
@@ -58,3 +72,8 @@ class IncomeService:
                 month += 1
             current_month = f"{year:04d}-{month:02d}"
         return incomes
+    
+    def delete(self, *, user_id: int, income_id: int) -> None:
+        obj = self.get_or_404(user_id=user_id, income_id=income_id)
+        self.repository.delete(obj)
+        return
