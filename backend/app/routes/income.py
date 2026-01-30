@@ -15,7 +15,7 @@ def create_income(
     session: Session = Depends(get_session)
 ):
     service = IncomeService(session)
-    income = service.create_income(data=income_data.dict(), user_id=CURRENT_USER_ID)
+    income = service.create(user_id=CURRENT_USER_ID, income_in=income_data)
     return income
 
 @router.get("/{income_id}", response_model=IncomeRead)
@@ -38,7 +38,7 @@ def get_income(
 ):
 
     service = IncomeService(session)
-    return service.get_income(
+    return service.get(
         user_id=CURRENT_USER_ID,
         month=month,
     )
@@ -70,10 +70,10 @@ def update_income(
         raise HTTPException(status_code=404, detail="Income not found")
     for key, value in income_data.dict(exclude_unset=True).items():
         setattr(income, key, value)
-    updated_income = service.update_income(income=income)
+    updated_income = service.update(income=income)
     return updated_income
 
-@router.delete("/{income_id}", status_code=204)
+@router.delete("/id/{income_id}", status_code=204)
 def delete_income(
     income_id: int,
     session: Session = Depends(get_session)
