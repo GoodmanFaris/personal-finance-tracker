@@ -16,6 +16,10 @@ class IncomeService:
         if obj is None:
             raise HTTPException(status_code=404, detail="Income record not found")
         return obj
+    
+    def get(self, *, user_id: int) -> list[IncomeRead]:
+        service = IncomeService(self.session)
+        return service.get_or_404(user_id=user_id)
 
     def create(self, *, user_id: int, income_in: IncomeCreate) -> IncomeRead:
         if income_in.amount < 0:
