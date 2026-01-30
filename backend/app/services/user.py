@@ -6,7 +6,7 @@ from app.repositories.user import UserRepository
 from app.schemas.user import UserCreate, UserRead, UserUpdate
 
 class UserService:
-    def __init__(self,session: Session):
+    def __init__(self, session: Session):
         self.session = session
         self.repository = UserRepository(session)
     
@@ -31,7 +31,7 @@ class UserService:
 
         return self.repository.update(obj)
     
-    def create_user(self, *, user_in: UserCreate) -> UserRead:
+    def create(self, *, user_in: UserCreate) -> UserRead:
         existing_user = self.repository.get_by_email(email=user_in.email)
         if user_in.currency is None:
             user_in.currency = "EUR"
@@ -40,4 +40,23 @@ class UserService:
             raise HTTPException(status_code=400, detail="Email already in use")
         
         return self.repository.create(data=user_in.dict())
+    
+    def delete(self, *, user_id: int) -> UserRead:
+        obj = self.get_current_user(user_id=user_id)
+        return self.repository.delete(user=obj)
+    
+    def get_by_id(self, *, user_id: int) -> User:
+        obj = self.repository.get_by_id(user_id=user_id)
+        if obj is None:
+            raise HTTPException(status_code=404, detail="User not found")
+        return obj
+    
+    def get_by_email(self, *, email: str) -> User:
+        obj = self.repository.get_by_email(email=email)
+        if obj is None:
+            raise HTTPException(status_code=404, detail="User not found")
+        return obj
+    
+    def update(self, *, user: User) -> User:
+        return self.repository.update(user)
     
