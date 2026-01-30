@@ -28,22 +28,22 @@ class SummaryRepository:
         results = self.session.exec(statement).all()
         return results
     
-    def get_expenses_by_category(self, *, user_id: int, start_month: str, end_month: str ) -> List[Transaction]:
+    def get_expenses_by_category(self, *, user_id: int, start_date: str, end_date: str ) -> List[Transaction]:
         statement = select(Transaction).where(
             Transaction.user_id == user_id,
-            Transaction.month >= start_month,
-            Transaction.month <= end_month,
+            Transaction.date >= start_date,
+            Transaction.date <= end_date,
             Transaction.type == "expense",
             Transaction.category_id == Category.id
         ).order_by(Transaction.date)
         results = self.session.exec(statement).all()
         return results
     
-    def get_total_expenses(self, *, user_id: int, start_month: str, end_month: str ) -> float:
+    def get_total_expenses(self, *, user_id: int, start_date: str, end_date: str ) -> float:
         statement = select(Transaction).where(
             Transaction.user_id == user_id,
-            Transaction.month >= start_month,
-            Transaction.month <= end_month,
+            Transaction.date >= start_date,
+            Transaction.date <= end_date,
             Transaction.type == "expense"
         )
         results = self.session.exec(statement).all()
