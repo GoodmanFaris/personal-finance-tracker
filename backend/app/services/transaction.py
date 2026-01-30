@@ -11,13 +11,13 @@ class TransactionService:
         self.session = session
         self.repository = TransactionRepository(session)
 
-    def get_transaction_or_404(self, *, user_id: int, transaction_id: int) -> Transaction:
+    def get_or_404(self, *, user_id: int, transaction_id: int) -> Transaction:
         obj = self.repository.get_by_id(user_id=user_id, transaction_id=transaction_id)
         if obj is None:
             raise HTTPException(status_code=404, detail="Transaction not found")
         return obj
     
-    def create_transaction(self, *, user_id: int, transaction_in: TransactionCreate) -> TransactionRead:
+    def create(self, *, user_id: int, transaction_in: TransactionCreate) -> TransactionRead:
         categoties = CategoryRepository(self.session).list_all(user_id=user_id)
         
         if transaction_in.amount <= 0:
@@ -39,13 +39,12 @@ class TransactionService:
 
         return self.repository.create(data=transaction_in.dict(), user_id=user_id)
     
-    def delete_transaction(self, *, user_id: int, transaction_id: int) -> TransactionRead:
-        obj = self.get_transaction_or_404(user_id=user_id, transaction_id=transaction_id)
+    def delete(self, *, user_id: int, transaction_id: int) -> TransactionRead:
+        obj = self.get_or_404(user_id=user_id, transaction_id=transaction_id)
         return self.repository.delete(transaction=obj)
     
-    def update_transaction(self, *, user_id: int, transaction_id: int, payload: TransactionUpdate) -> TransactionRead:
-        obj = self.get_transaction_or_404(user_id=user_id, transaction_id=transaction_id)
-
+    def update(self, *, user_id: int, transaction_id: int, payload: TransactionUpdate) -> TransactionRead:
+        obj = self.get_or_404(user_id=user_id, transaction_id=transaction_id)
         if payload.amount is not None:
             if payload.amount <= 0:
                 raise HTTPException(status_code=400, detail="Transaction amount must be positive")
@@ -97,3 +96,8 @@ class TransactionService:
             current_month = f"{year:04d}-{month:02d}"
 
         return all_transactions
+    
+    def list_transactions_by_description(self, *, user_id: int, description: str) -> list[TransactionRead]:
+        return self.repository.get_by_desc(description=description, user_id=user_id)
+    
+    

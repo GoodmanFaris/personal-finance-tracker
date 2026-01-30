@@ -77,3 +77,13 @@ class CategoryService:
         
         category.active = True
         return self.repository.update(category)
+    
+    def get_by_id(self, *, user_id: int, category_id: int) -> CategoryRead:
+        category = self.get_or_404(user_id=user_id, category_id=category_id)
+        return category
+    
+    def get_by_name(self, *, user_id: int, name: str) -> CategoryRead:
+        category = self.repository.get_by_name(name=name, user_id=user_id)
+        if category is None or not category.active:
+            raise HTTPException(status_code=404, detail="Category not found")
+        return category
