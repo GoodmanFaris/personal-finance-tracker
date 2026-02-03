@@ -29,3 +29,90 @@ def get_category(
         raise HTTPException(status_code=404, detail="Category not found")
     return category
 
+@router.put("/{category_id}", response_model=CategoryRead)
+def update_category(
+    category_id: int,
+    category_data: CategoryUpdate,
+    session: Session = Depends(get_session)
+):
+    service = CategoryService(session)
+    category = service.update(
+        category_id=category_id,
+        user_id=CURRENT_USER_ID,
+        payload=category_data
+    )
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+    return category
+
+@router.delete("/{category_id}", status_code=204)
+def delete_category(
+    category_id: int,
+    session: Session = Depends(get_session)
+):
+    service = CategoryService(session)
+    success = service.delete(category_id=category_id, user_id=CURRENT_USER_ID)
+    if not success:
+        raise HTTPException(status_code=404, detail="Category not found")
+    return None
+
+@router.get("/list", response_model=list[CategoryRead])
+def list_categories(
+    session: Session = Depends(get_session)
+):
+    service = CategoryService(session)
+    categories = service.list_categories(user_id=CURRENT_USER_ID)
+    return categories
+
+@router.post("/{category_id}/restore", response_model=CategoryRead)
+def restore_category(
+    category_id: int,
+    session: Session = Depends(get_session)
+):
+    service = CategoryService(session)
+    category = service.restore(category_id=category_id, user_id=CURRENT_USER_ID)
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found or already active")
+    return category
+
+@router.patch("/{category_id}/deactivate", response_model=CategoryRead)
+def deactivate_category(
+    category_id: int,
+    session: Session = Depends(get_session)
+):
+    service = CategoryService(session)
+    category = service.deactivate(category_id=category_id, user_id=CURRENT_USER_ID)
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found or already inactive")
+    return category
+
+@router.patch("/{category_id}/activate", response_model=CategoryRead)
+def activate_category(
+    category_id: int,
+    session: Session = Depends(get_session)
+):
+    service = CategoryService(session)
+    category = service.activate(category_id=category_id, user_id=CURRENT_USER_ID)
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found or already active")
+    return category
+
+@router.get("/{name}/by-name", response_model=CategoryRead)
+def get_category_by_name(
+    name: str,
+    session: Session = Depends(get_session)
+):
+    service = CategoryService(session)
+    category = service.get_by_name(name=name, user_id=CURRENT_USER_ID)
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+    return category
+
+@router.get("/list_all/", response_model=list[CategoryRead])
+def list_all_categories(
+    session: Session = Depends(get_session)
+):
+    service = CategoryService(session)
+    categories = service.list_categories(user_id=CURRENT_USER_ID)
+    return categories
+
