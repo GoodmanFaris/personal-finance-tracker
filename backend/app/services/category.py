@@ -11,12 +11,12 @@ class CategoryService:
         self.repository = CategoryRepository(session)
 
     def get_or_404(self, *, user_id: int, category_id: int) -> Category:
-        obj = self.repo.get_by_id(user_id=user_id, category_id=category_id)
+        obj = self.repository.get_by_id(user_id=user_id, category_id=category_id)
         if obj is None:
             raise HTTPException(status_code=404, detail="Category not found")
         return obj
 
-    def create_category(self, *, user_id: int, category_in: CategoryCreate) -> CategoryRead:
+    def create(self, *, user_id: int, category_in: CategoryCreate) -> CategoryRead:
         if category_in.default_budget < 0:
             raise HTTPException(status_code=400, detail="Default budget cannot be negative")
         
@@ -36,7 +36,7 @@ class CategoryService:
     def list_categories(self, *, user_id: int, category_id: int, payload: CategoryUpdate) -> list[CategoryRead]:
         return self.repository.list(user_id=user_id, category_id=category_id, payload=payload)
 
-    def update_category(self, *, user_id: int, category_id: int, payload: CategoryUpdate) -> CategoryRead:
+    def update(self, *, user_id: int, category_id: int, payload: CategoryUpdate) -> CategoryRead:
         obj = self.get_or_404(user_id=user_id, category_id=category_id)
 
         if not obj.active:
@@ -61,7 +61,7 @@ class CategoryService:
 
         return self.repository.update(obj)
 
-    def delete_category(self, *, user_id: int, category_id: int) -> None:
+    def delete(self, *, user_id: int, category_id: int) -> None:
         category = self.get_or_404(user_id=user_id, category_id=category_id)
 
         if not category.active:
@@ -73,7 +73,7 @@ class CategoryService:
         category = self.get_or_404(user_id=user_id, category_id=category_id)
 
         if category.active:
-            return
+            return category
         
         category.active = True
         return self.repository.update(category)
