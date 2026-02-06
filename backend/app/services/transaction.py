@@ -6,6 +6,7 @@ from app.schemas.transaction import TransactionCreate, TransactionRead, Transact
 from app.core.formating import month_to_date_range
 from app.repositories.category import CategoryRepository
 
+
 class TransactionService:
     def __init__(self, session: Session):
         self.session = session
@@ -17,8 +18,11 @@ class TransactionService:
             raise HTTPException(status_code=404, detail="Transaction not found")
         return obj
     
+    def get_by_id(self, *, user_id: int, transaction_id: int) -> TransactionRead:
+        return self.get_or_404(user_id=user_id, transaction_id=transaction_id)
+    
     def create(self, *, user_id: int, transaction_in: TransactionCreate) -> TransactionRead:
-        categoties = CategoryRepository(self.session).list_all(user_id=user_id)
+        categoties = CategoryRepository(self.session).list(user_id=user_id)
         
         if transaction_in.amount <= 0:
             raise HTTPException(status_code=400, detail="Transaction amount must be positive")
@@ -33,9 +37,10 @@ class TransactionService:
             raise HTTPException(status_code=400, detail="Category does not belong to the user")
         
         if transaction_in.category_id is not None:
-            category = CategoryRepository(self.session).get_by_id(category_id=transaction_in.category_id)
+            category = CategoryRepository(self.session).get_by_id(user_id=user_id, category_id=transaction_in.category_id)
             if category is None or not category.active:
                 raise HTTPException(status_code=400, detail="Category is inactive or does not exist")
+            
 
         return self.repository.create(data=transaction_in.dict(), user_id=user_id)
     
@@ -56,7 +61,7 @@ class TransactionService:
             obj.type = payload.type
 
         if payload.category_id is not None:
-            category = CategoryRepository(self.session).get_by_id(category_id=payload.category_id)
+            category = CategoryRepository(self.session).get_by_id(user_id=user_id, category_id=payload.category_id)
             if category is None or not category.active:
                 raise HTTPException(status_code=400, detail="Category is inactive or does not exist")
             obj.category_id = payload.category_id
@@ -66,7 +71,6 @@ class TransactionService:
 
         if payload.date is not None:
             obj.date = payload.date
-            obj.month = payload.date.strftime("%Y-%m")
 
         return self.repository.update(obj)
     
@@ -100,4 +104,6 @@ class TransactionService:
     def list_transactions_by_description(self, *, user_id: int, description: str) -> list[TransactionRead]:
         return self.repository.get_by_desc(description=description, user_id=user_id)
     
+    def list(self, *, user_id: int) -> list[TransactionRead]:
+        return self.repository.list(user_id=user_id)
     

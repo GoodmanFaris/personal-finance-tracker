@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import HTTPException
 from sqlmodel import Session
 
@@ -29,21 +30,29 @@ class IncomeService:
         if existing_income:
             income_in.amount += existing_income[0].amount
 
+        income_in.month = validate_month(income_in.month)
+        if income_in.month is None:
+            raise HTTPException(status_code=400, detail="Income month must be in format YYYY-MM")
+
         
         return self.repository.create(data=income_in.dict(), user_id=user_id)
     
     def get_by_id(self, *, user_id: int, income_id: int) -> IncomeRead:
         return self.get_or_404(user_id=user_id, income_id=income_id)
     
-    def get_by_month(self, *, user_id: int, month: str) -> list[IncomeRead]:
+    def get_by_month(self, *, user_id: int, month: str) -> list[Optional[IncomeRead]]:
         validate_month(month)
+        
         return self.repository.get_by_month(month=month, user_id=user_id)
     
     def upsert_by_month(self, *, user_id: int, month: str, amount: float) -> IncomeRead:
         if amount < 0:
             raise HTTPException(status_code=400, detail="Income amount cannot be negative")
         
-        validate_month(month)
+        month = validate_month(month)
+        if month is None:
+            raise HTTPException(status_code=400, detail="Income month must be in format YYYY-MM")
+        
         return self.repository.upsert_by_month(month=month, amount=amount, user_id=user_id)
 
     def update(self, *, user_id: int, income_id: int, payload: IncomeUpdate) -> IncomeRead:
@@ -55,7 +64,7 @@ class IncomeService:
             obj.amount = payload.amount
 
         if payload.month is not None:
-            obj.month = payload.month
+            payload.month = validate_month(payload.month)
 
         return self.repository.update(obj)
     

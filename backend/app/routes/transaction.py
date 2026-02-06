@@ -56,4 +56,12 @@ def delete_transaction(
         raise HTTPException(status_code=404, detail="Transaction not found")
     return None
 
+@router.get("/list/", response_model=list[TransactionRead])
+def list_transactions(
+    session: Session = Depends(get_session)
+):
+    service = TransactionService(session)
+    transactions = service.list(user_id=CURRENT_USER_ID)
+    return transactions
+
 

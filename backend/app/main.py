@@ -7,6 +7,7 @@ from app.models.transaction import Transaction
 from app.models.category import Category
 from app.models.income import Income
 
+
 app = FastAPI()
 
 
@@ -32,3 +33,10 @@ async def startup_event():
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
+
+from app.routes import category, transaction, income
+app.include_router(category.router)
+app.include_router(transaction.router)
+app.include_router(income.router)
+from app.routes import summary
+app.include_router(summary.router)

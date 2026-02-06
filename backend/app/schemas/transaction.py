@@ -1,10 +1,11 @@
 from typing import Literal, Optional
 from pydantic import BaseModel, EmailStr, Field
+from datetime import date
 
 class TransactionCreate(BaseModel):
     amount: float = Field(default=0, ge=0)
     type: Literal['income', 'expense']
-    date: str
+    date: date
     description: Optional[str] = Field(default="", max_length=255)
     category_id: int
 
@@ -12,7 +13,7 @@ class TransactionRead(BaseModel):
     id: int
     amount: float
     type: Literal['income', 'expense']
-    date: str
+    date: date
     description: str
     category_id: int
 
