@@ -38,7 +38,10 @@ def get_income(
 ):
 
     service = IncomeService(session)
-    return service.get(
+    list = service.get_by_month(user_id=CURRENT_USER_ID, month=month)
+    if not list:
+        raise HTTPException(status_code=404, detail="Income for the specified month not found")
+    return service.get_by_month(
         user_id=CURRENT_USER_ID,
         month=month,
     )
@@ -70,7 +73,7 @@ def update_income(
         raise HTTPException(status_code=404, detail="Income not found")
     for key, value in income_data.dict(exclude_unset=True).items():
         setattr(income, key, value)
-    updated_income = service.update(income=income)
+    updated_income = service.update(income_id = income_id, user_id=CURRENT_USER_ID, payload=income_data)
     return updated_income
 
 @router.delete("/id/{income_id}", status_code=204)
@@ -82,7 +85,7 @@ def delete_income(
     income = service.get_by_id(income_id=income_id, user_id=CURRENT_USER_ID)
     if not income:
         raise HTTPException(status_code=404, detail="Income not found")
-    service.delete(income=income)
+    service.delete(income_id=income_id, user_id=CURRENT_USER_ID)
 
 @router.get("/list_by_time_period/", response_model=list[IncomeRead])
 def list_incomes_by_time_period(

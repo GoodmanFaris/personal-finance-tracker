@@ -29,7 +29,7 @@ class TransactionRepository:
         return results
     
     def list_by_month(self, *, month: str, user_id: int) -> List[Transaction]:
-        statement = select(Transaction).where(Transaction.month == month, Transaction.user_id == user_id).order_by(Transaction.date)
+        statement = select(Transaction).where(Transaction.date.startswith(month), Transaction.user_id == user_id).order_by(Transaction.date)
         results = self.session.exec(statement).all()
         return results
     

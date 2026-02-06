@@ -17,9 +17,14 @@ class CategoryRepository:
         statement = select(Category).where(Category.user_id == user_id, Category.active == True).order_by(Category.id)
         results = self.session.exec(statement).all()
         return results
+    
+    def list_all(self, *, user_id: int) -> List[Category]:
+        statement = select(Category).where(Category.user_id == user_id).order_by(Category.id)
+        results = self.session.exec(statement).all()
+        return results
 
     def get_by_id(self, *, category_id: int, user_id: int) -> Optional[Category]:
-        statement = select(Category).where(Category.id == category_id, Category.user_id == user_id, Category.active == True)
+        statement = select(Category).where(Category.id == category_id, Category.user_id == user_id)
         result = self.session.exec(statement).first()
         return result
     
@@ -27,6 +32,12 @@ class CategoryRepository:
         statement = select(Category).where(Category.name == name, Category.user_id == user_id, Category.active == True)
         result = self.session.exec(statement).first()
         return result
+    
+    def update(self, category: Category) -> Category:
+        self.session.add(category)
+        self.session.commit()
+        self.session.refresh(category)
+        return category
 
     def delete(self, *, category: Category) -> None:
         category.active = False

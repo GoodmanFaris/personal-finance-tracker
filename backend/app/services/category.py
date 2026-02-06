@@ -15,6 +15,7 @@ class CategoryService:
         if obj is None:
             raise HTTPException(status_code=404, detail="Category not found")
         return obj
+    
 
     def create(self, *, user_id: int, category_in: CategoryCreate) -> CategoryRead:
         if category_in.default_budget < 0:
@@ -33,8 +34,11 @@ class CategoryService:
         
         return self.repository.create(data=category_in.dict(), user_id=user_id)
 
-    def list_categories(self, *, user_id: int, category_id: int, payload: CategoryUpdate) -> list[CategoryRead]:
-        return self.repository.list(user_id=user_id, category_id=category_id, payload=payload)
+    def list_categories(self, *, user_id: int) -> list[CategoryRead]:
+        return self.repository.list(user_id=user_id)
+    
+    def list_all_categories_including_inactive(self, *, user_id: int) -> list[CategoryRead]:
+        return self.repository.list_all(user_id=user_id)
 
     def update(self, *, user_id: int, category_id: int, payload: CategoryUpdate) -> CategoryRead:
         obj = self.get_or_404(user_id=user_id, category_id=category_id)
@@ -65,17 +69,26 @@ class CategoryService:
         category = self.get_or_404(user_id=user_id, category_id=category_id)
 
         if not category.active:
-            return
+            return category
         
         self.repository.delete(category=category)
 
-    def restore_category(self, *, user_id: int, category_id: int) -> CategoryRead:
+    def restore(self, *, user_id: int, category_id: int) -> CategoryRead:
         category = self.get_or_404(user_id=user_id, category_id=category_id)
 
         if category.active:
             return category
         
         category.active = True
+        return self.repository.update(category)
+    
+    def deactivate(self, *, user_id: int, category_id: int) -> CategoryRead:
+        category = self.get_or_404(user_id=user_id, category_id=category_id)
+
+        if not category.active:
+            return category
+        
+        category.active = False
         return self.repository.update(category)
     
     def get_by_id(self, *, user_id: int, category_id: int) -> CategoryRead:
