@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 from fastapi import HTTPException
 from sqlmodel import Session
 
@@ -6,6 +6,7 @@ from app.models.income import Income
 from app.repositories.income import IncomeRepository
 from app.schemas.income import IncomeCreate, IncomeRead, IncomeUpdate
 from app.core.validators import validate_month
+from app.core.formating import next_month
 
 class IncomeService:
     def __init__(self, session: Session):
@@ -72,18 +73,15 @@ class IncomeService:
         validate_month(date_from)
         validate_month(date_to)
         
-        incomes = []
+        incomes: List[IncomeRead] = []
         current_month = date_from
+
+
         while current_month <= date_to:
-            monthly_incomes = self.repository.get_by_month(month=current_month, user_id=user_id)
-            incomes.extend(monthly_incomes)
-            year, month = map(int, current_month.split("-"))
-            if month == 12:
-                month = 1
-                year += 1
-            else:
-                month += 1
-            current_month = f"{year:04d}-{month:02d}"
+            income = self.repository.get_by_month(month = current_month, user_id=user_id)
+            if income is not None:
+                incomes.append(income)
+            current_month = next_month(current_month)
         return incomes
     
     def delete(self, *, user_id: int, income_id: int) -> None:
