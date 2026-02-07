@@ -2,6 +2,7 @@ from fastapi import HTTPException
 from sqlmodel import Session
 
 from app.repositories.summary import SummaryRepository
+from app.core.formating import month_to_date_range
 
 class SummaryService:
     def __init__(self, session: Session):
@@ -23,6 +24,8 @@ class SummaryService:
         )
     
     def get_expenses_by_category(self, *, user_id: int, start_date: str, end_date: str):
+        start_date, _ = month_to_date_range(start_date)
+        _, end_date = month_to_date_range(end_date)
         return self.repository.get_expenses_by_category(
             user_id=user_id,
             start_date=start_date,
@@ -30,11 +33,15 @@ class SummaryService:
         )
     
     def get_total_expenses(self, *, user_id: int, start_date: str, end_date: str):
-        return self.repository.get_total_expenses(
+        start_date, _ = month_to_date_range(start_date)
+        _, end_date = month_to_date_range(end_date)
+        results =  self.repository.get_total_expenses(
             user_id=user_id,
             start_date=start_date,
             end_date=end_date
         )
+        return results
+
     
     def get_total_income(self, *, user_id: int, start_date: str, end_date: str):
         return self.repository.get_total_income(

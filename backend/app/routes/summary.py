@@ -1,12 +1,16 @@
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
 from app.core.database import get_session
 from app.services.summary import SummaryService
+from app.schemas.summary import ExpensesByCategory
 
 router = APIRouter(prefix="/summary", tags=["summary"])
 
-@router.get("/get_expenses_by_category", response_model=dict)
+USER_ID = 1;
+
+@router.get("/get_expenses_by_category", response_model=List[ExpensesByCategory])
 def get_expenses_by_category(
     start_date: str,
     end_date: str,
@@ -14,7 +18,7 @@ def get_expenses_by_category(
 ):
     service = SummaryService(session)
     return service.get_expenses_by_category(
-        user_id=1,  # Placeholder for authenticated user ID
+        user_id=USER_ID,  # Placeholder for authenticated user ID
         start_date=start_date,
         end_date=end_date
     )
@@ -27,7 +31,7 @@ def get_total_expenses(
 ):
     service = SummaryService(session)
     return service.get_total_expenses(
-        user_id=1,  # Placeholder for authenticated user ID
+        user_id=USER_ID,  # Placeholder for authenticated user ID
         start_date=start_date,
         end_date=end_date
     )

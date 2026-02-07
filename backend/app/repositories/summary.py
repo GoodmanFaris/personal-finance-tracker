@@ -1,9 +1,11 @@
+from datetime import date
 from typing import Optional, List
-from sqlmodel import Session, select
+from sqlmodel import Session, func, select
 from app.models.income import Income
 from app.models.transaction import Transaction
 from app.models.user import User
 from app.models.category import Category
+from app.schemas.summary import ExpensesByCategory
 
 
 class SummaryRepository:
@@ -28,18 +30,22 @@ class SummaryRepository:
         results = self.session.exec(statement).all()
         return results
     
-    def get_expenses_by_category(self, *, user_id: int, start_date: str, end_date: str ) -> List[Transaction]:
-        statement = select(Transaction).where(
-            Transaction.user_id == user_id,
-            Transaction.date >= start_date,
-            Transaction.date <= end_date,
-            Transaction.type == "expense",
-            Transaction.category_id == Category.id
-        ).order_by(Transaction.date)
+    def get_expenses_by_category(self, *, user_id: int, start_date: date, end_date: date ) -> list[ExpensesByCategory]:
+        statement = (
+            select(Category.name, func.sum(Transaction.amount))
+            .join(Transaction, Transaction.category_id == Category.id)
+            .where(
+                Transaction.user_id == user_id,
+                Transaction.date >= start_date,
+                Transaction.date < end_date,
+                Transaction.type == "expense"
+            )
+            .group_by(Category.name)
+        )
         results = self.session.exec(statement).all()
-        return results
+        return [ExpensesByCategory(category=name, total=float(total or 0)) for name, total in results]
     
-    def get_total_expenses(self, *, user_id: int, start_date: str, end_date: str ) -> float:
+    def get_total_expenses(self, *, user_id: int, start_date: date, end_date: date ) -> float:
         statement = select(Transaction).where(
             Transaction.user_id == user_id,
             Transaction.date >= start_date,

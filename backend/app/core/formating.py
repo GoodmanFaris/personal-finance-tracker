@@ -32,3 +32,11 @@ def generate_month_range(start_month: str, end_month: str) -> list[str]:
             current_m += 1
 
     return months
+
+
+def next_month(month: str) -> str:
+    y, m = map(int, month.split("-"))
+    if m == 12:
+        return f"{y+1:04d}-01"
+    return f"{y:04d}-{m+1:02d}"
+
