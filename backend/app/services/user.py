@@ -26,8 +26,8 @@ class UserService:
                 raise HTTPException(status_code=400, detail="Email already in use")
             obj.email = payload.email
 
-        if payload.full_name is not None:
-            obj.full_name = payload.full_name
+        if payload.name is not None:
+            obj.name = payload.name
 
         return self.repository.update(obj)
     
