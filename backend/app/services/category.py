@@ -69,7 +69,7 @@ class CategoryService:
         category = self.get_or_404(user_id=user_id, category_id=category_id)
 
         if not category.active:
-            return category
+            raise HTTPException(status_code=400, detail="Category is already inactive")
         
         self.repository.delete(category=category)
 
