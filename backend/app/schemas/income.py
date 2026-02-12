@@ -12,4 +12,3 @@ class IncomeRead(BaseModel):
 
 class IncomeUpdate(BaseModel):
     amount: Optional[float] = Field(default=None, ge=0)
-    month: Optional[str] = None
