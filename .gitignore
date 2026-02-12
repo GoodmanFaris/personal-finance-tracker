@@ -1,0 +1,27 @@
+# =====================
+# Python / Backend
+# =====================
+backend/.venv/
+backend/__pycache__/
+backend/**/*.pyc
+backend/.env
+
+# =====================
+# Node / Frontend
+# =====================
+frontend/node_modules/
+frontend/.env
+
+# =====================
+# Docker
+# =====================
+**/pgdata/
+**/postgres_data/
+
+# =====================
+# OS / IDE
+# =====================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

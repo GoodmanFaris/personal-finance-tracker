@@ -41,6 +41,11 @@ class TransactionService:
             if category is None or not category.active:
                 raise HTTPException(status_code=400, detail="Category is inactive or does not exist")
             
+        # if transaction is expense then default_budget = default_budget - amount, if income then default_budget = default_budget + amount
+        if transaction_in.type == "expense":
+            category.default_budget -= transaction_in.amount
+        elif transaction_in.type == "income":
+            category.default_budget += transaction_in.amount
 
         return self.repository.create(data=transaction_in.dict(), user_id=user_id)
     
@@ -77,7 +82,7 @@ class TransactionService:
     def list_transactions_by_month(self, *, user_id: int, month: str) -> list[TransactionRead]:
         return self.repository.list_by_month(month=month, user_id=user_id)
     
-    def list_transactions_by_category(self, *, user_id: int, category_id: int) -> list[TransactionRead]:
+    def list_by_category(self, *, user_id: int, category_id: int) -> list[TransactionRead]:
         return self.repository.get_by_category(category_id=category_id, user_id=user_id)
     
     def list_transactions_by_time_period(self, *, user_id: int, start_date: str, end_date: str) -> list[TransactionRead]:

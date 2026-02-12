@@ -8,7 +8,7 @@ from app.schemas.summary import ExpensesByCategory
 
 router = APIRouter(prefix="/summary", tags=["summary"])
 
-USER_ID = 1;
+USER_ID = 1
 
 @router.get("/get_expenses_by_category", response_model=List[ExpensesByCategory])
 def get_expenses_by_category(
