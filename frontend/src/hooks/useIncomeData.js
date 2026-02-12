@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { updateIncomesByMonth, getIncomesByMonth } from "../lib/income";
 
 const pad2 = (n) => String(n).padStart(2, "0");
@@ -12,7 +12,11 @@ const currentMonthKey = () => {
   return `${y}-${m}`; // YYYY-MM
 };
 
-export default function useIncomeData(monthKey = currentMonthKey()) {
+export default function useIncomeData(monthKeyProp) {
+  const monthKey = useMemo(
+    () => monthKeyProp || currentMonthKey(),
+    [monthKeyProp],
+  );
     const [income, setIncome] = useState(0);
 
     const [incomeModalOpen, setIncomeModalOpen] = useState(false);
@@ -26,27 +30,29 @@ export default function useIncomeData(monthKey = currentMonthKey()) {
     const balance = useMemo(() => Number(income) || 0, [income]);
 
     const RefreshIncome = async () => {
-        try {
-      setLoadingIncome(true);
-      const data = await getIncomesByMonth(monthKey);
+      setIncomeError("");
+      setIncomeMsg("");
 
-      let amount = 0;
-      if (data && typeof data.amount !== "undefined")
-        amount = Number(data.amount);
-      else if (typeof data === "number") amount = Number(data);
+      try {
+        setLoadingIncome(true);
+        const data = await getIncomesByMonth(monthKey);
 
-      setIncome(Number.isFinite(amount) ? amount : 0);
-    } catch (err) {
-      // If no record exists for this month, treat as 0 (no error)
-      const status = err?.response?.status;
-      if (status === 404) {
-        setIncome(0);
-      } else {
-        setIncomeError("Failed to load income.");
+        let amount = 0;
+        if (data && typeof data.amount !== "undefined")
+          amount = Number(data.amount);
+        else if (typeof data === "number") amount = Number(data);
+
+        setIncome(Number.isFinite(amount) ? amount : 0);
+      } catch (err) {
+        const status = err?.response?.status;
+        if (status === 404) {
+          setIncome(0);
+        } else {
+          setIncomeError("Failed to load income.");
+        }
+      } finally {
+        setLoadingIncome(false);
       }
-    } finally {
-      setLoadingIncome(false);
-    }
   };
 
   useEffect(() => {
@@ -89,16 +95,17 @@ export default function useIncomeData(monthKey = currentMonthKey()) {
     };
 
     return {
-        income,
-        balance,
-        incomeModalOpen,
-        incomeDraft,
-        loadingIncome,
-        savingIncome,
-        incomeError,
-        incomeMsg,
-        openIncomeModal,
-        closeIncomeModal,
-        saveIncome,
+      income,
+      balance,
+      incomeModalOpen,
+      incomeDraft,
+      loadingIncome,
+      savingIncome,
+      incomeError,
+      incomeMsg,
+      openIncomeModal,
+      closeIncomeModal,
+      saveIncome,
+      setIncomeDraft,
     };
 }

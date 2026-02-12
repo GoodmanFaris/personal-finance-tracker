@@ -1,264 +1,350 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import useDashboardData from "../../src/hooks/useDashboardData";
 
 export default function DashboardPage() {
-  const {
-    monthKey,
-    income,
-    balance,
-    loadingIncome,
-    incomeError,
-    incomeMsg,
-    incomeModalOpen,
-    openIncomeModal,
-    closeIncomeModal,
-    incomeDraft,
-    setIncomeDraft,
-    saveIncome,
-    savingIncome,
+  const d = useDashboardData();
 
-    categories,
-    loadingCategories,
-    savingCategory,
-    categoryError,
-    categoryMsg,
-    addCategoryModalOpen,
-    openAddCategoryModal,
-    closeAddCategoryModal,
-    categoryDraft,
-    setCategoryDraft,
-    saveCategory,
+  // local state za "koja kategorija je trenutno otvorena"
+  const [activeCategory, setActiveCategory] = useState(null);
 
-    loadCategories,
-    transactionDraft,
-    setTransactionDraft,
-    openCategoryForTransaction,
-    createTransaction,
-    savingTransaction,
-    transactionError,
-    transactionMsg,
-    
-  } = useDashboardData();
+  const activeTx = useMemo(() => {
+    if (!activeCategory?.id) return [];
+    return d.transactionsByCategory?.[activeCategory.id] || [];
+  }, [activeCategory, d.transactionsByCategory]);
 
   return (
-    <div className="max-w-5xl mx-auto p-6 space-y-4">
-      {/* HEADER CARD */}
-      <section className="bg-white border rounded-lg p-5 flex items-center justify-between">
-        <div>
-          <p className="text-sm text-gray-600">Current month</p>
-          <p className="text-lg font-semibold">{monthKey}</p>
-        </div>
-
-        <div className="text-right">
-          <p className="text-sm text-gray-600">Balance (for now = income)</p>
-          <p className="text-3xl font-semibold">
-            {loadingIncome ? "Loading..." : balance}
-          </p>
-          <p className="text-sm text-gray-500 mt-1">
-            Income: <span className="font-medium">{income}</span>
-          </p>
-
-          <button
-            onClick={openIncomeModal}
-            className="mt-3 px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
-          >
-            Update income
-          </button>
-        </div>
-      </section>
-
-      <section className="bg-white border rounded-lg p-5 space-y-4">
+    <div className="max-w-4xl mx-auto p-6 space-y-6">
+      {/* INCOME */}
+      <section className="border rounded p-4 space-y-2 bg-white">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold">Categories</h2>
+          <div>
+            <div className="text-sm text-gray-600">Current month</div>
+            <div className="font-semibold">{d.monthKey || "(monthKey)"}</div>
+          </div>
 
-          <button
-            onClick={openAddCategoryModal}
-            className="px-4 py-2 rounded-md bg-gray-900 text-white hover:bg-black transition"
-          >
-            + Add category
-          </button>
+          <div className="text-right">
+            <div className="text-sm text-gray-600">Balance (now = income)</div>
+            <div className="text-2xl font-bold">
+              {d.loadingIncome ? "Loading..." : d.balance}
+            </div>
+            <div className="text-sm text-gray-600">
+              Income: <span className="font-medium">{d.income}</span>
+            </div>
+          </div>
         </div>
 
-        {categoryMsg ? (
-          <div className="text-sm text-gray-700 bg-gray-50 border rounded-md p-3">
-            {categoryMsg}
-          </div>
+        <button
+          onClick={d.openIncomeModal}
+          className="px-3 py-2 rounded bg-blue-600 text-white"
+        >
+          Update income
+        </button>
+
+        {d.incomeMsg ? (
+          <p className="text-sm text-gray-700">{d.incomeMsg}</p>
         ) : null}
-
-        {categoryError ? (
-          <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-md p-3">
-            {categoryError}
-          </div>
+        {d.incomeError ? (
+          <p className="text-sm text-red-700">{d.incomeError}</p>
         ) : null}
-
-        {loadingCategories ? (
-          <p className="text-gray-600">Loading categories...</p>
-        ) : categories.length === 0 ? (
-          <p className="text-gray-600">No categories yet.</p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {categories.map((c) => (
-              <div key={c.id} className="border rounded-md p-4">
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <p className="font-medium">{c.name}</p>
-                    <p className="text-sm text-gray-600">
-                      Budget:{" "}
-                      <span className="font-medium">{c.default_budget ?? 0}</span>
-                    </p>
-                    {c.description ? (
-                      <p className="text-sm text-gray-500 mt-1">
-                        {c.description}
-                      </p>
-                    ) : null}
-                  </div>
-
-                  {/* kasnije ovdje ide X deactivate + click open modal */}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
       </section>
 
-      {addCategoryModalOpen ? (
+      {/* INCOME MODAL */}
+      {d.incomeModalOpen ? (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg w-full max-w-md border shadow-sm p-4 space-y-4">
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="font-semibold">Add category</h3>
-                <p className="text-sm text-gray-600">
-                  Create a new budget category
-                </p>
-              </div>
-              <button
-                onClick={closeAddCategoryModal}
-                className="text-gray-500 hover:text-gray-800"
-                aria-label="Close modal"
-              >
-                ✕
-              </button>
+          <div className="bg-white border rounded p-4 w-full max-w-sm space-y-3">
+            <div className="flex justify-between items-center">
+              <h3 className="font-semibold">Update income</h3>
+              <button onClick={d.closeIncomeModal}>✕</button>
             </div>
 
-            {/* Name */}
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">Name</label>
-              <input
-                value={categoryDraft.name}
-                onChange={(e) =>
-                  setCategoryDraft((prev) => ({
-                    ...prev,
-                    name: e.target.value,
-                  }))
-                }
-                className="w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="e.g. Food"
-              />
-            </div>
-
-            {/* Budget */}
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">Budget</label>
-              <input
-                type="number"
-                value={categoryDraft.budget}
-                onChange={(e) =>
-                  setCategoryDraft((prev) => ({
-                    ...prev,
-                    budget: e.target.value,
-                  }))
-                }
-                className="w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="e.g. 300"
-              />
-            </div>
-
-            {/* Description */}
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">
-                Description
-              </label>
-              <textarea
-                value={categoryDraft.description}
-                onChange={(e) =>
-                  setCategoryDraft((prev) => ({
-                    ...prev,
-                    description: e.target.value,
-                  }))
-                }
-                rows={3}
-                className="w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Optional note..."
-              />
-            </div>
+            <input
+              type="number"
+              value={d.incomeDraft}
+              onChange={(e) => d.setIncomeDraft(e.target.value)}
+              className="w-full border rounded px-3 py-2"
+              placeholder="1500"
+            />
 
             <div className="flex gap-2 justify-end">
               <button
-                className="px-4 py-2 rounded-md border hover:bg-gray-50"
-                onClick={closeAddCategoryModal}
+                className="px-3 py-2 border rounded"
+                onClick={d.closeIncomeModal}
               >
                 Cancel
               </button>
-
               <button
-                className="px-4 py-2 rounded-md bg-gray-900 text-white hover:bg-black disabled:opacity-60 disabled:cursor-not-allowed"
-                onClick={saveCategory}
-                disabled={savingCategory}
+                className="px-3 py-2 rounded bg-blue-600 text-white disabled:opacity-60"
+                onClick={d.saveIncome}
+                disabled={d.savingIncome}
               >
-                {savingCategory ? "Saving..." : "Save"}
+                {d.savingIncome ? "Saving..." : "Save"}
               </button>
             </div>
           </div>
         </div>
       ) : null}
 
-      {/* INCOME MODAL */}
-      {incomeModalOpen ? (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg w-full max-w-sm border shadow-sm p-4 space-y-3">
-            <div className="flex items-start justify-between">
-              <div>
-                <h3 className="font-semibold">Update income</h3>
-                <p className="text-sm text-gray-600">For {monthKey}</p>
-              </div>
-              <button
-                onClick={closeIncomeModal}
-                className="text-gray-500 hover:text-gray-800"
-                aria-label="Close modal"
+      {/* CATEGORIES */}
+      <section className="border rounded p-4 space-y-3 bg-white">
+        <div
+          className="flex items-center justify-between"
+        >
+          <h2 className="font-semibold">Categories</h2>
+          <button
+            onClick={d.openAddCategoryModal}
+            className="px-3 py-2 rounded bg-gray-900 text-white"
+          >
+            + Add category
+          </button>
+        </div>
+
+        {d.categoryMsg ? (
+          <p className="text-sm text-gray-700">{d.categoryMsg}</p>
+        ) : null}
+        {d.categoryError ? (
+          <p className="text-sm text-red-700">{d.categoryError}</p>
+        ) : null}
+
+        {d.loadingCategories ? (
+          <p className="text-gray-600">Loading...</p>
+        ) : d.categories?.length ? (
+          <div className="space-y-2">
+            {d.categories.map((c) => (
+              <div
+                key={c.id}
+                className="border rounded p-3 flex items-start justify-between gap-3"
               >
-                ✕
-              </button>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setActiveCategory(c);
+                    d.openCategoryForTransaction(c.id); // opens tx modal + loads tx
+                  }}
+                >
+                  <div className="font-medium">{c.name}</div>
+                  <div className="text-sm text-gray-600">
+                    Budget:{" "}
+                    <span className="font-medium">{c.default_budget ?? 0}</span>
+                  </div>
+                  {c.description ? (
+                    <div className="text-sm text-gray-500">{c.description}</div>
+                  ) : null}
+                </div>
+
+                <div className="flex gap-2">
+                  <button
+                    className="px-2 py-1 border rounded"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setActiveCategory(c);
+                      d.editCategory?.(c); // opens category modal in edit mode
+                    }}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    className="px-2 py-1 border rounded text-red-700"
+                    disabled={d.categoryToDelete === c.id}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      d.deleteCategoryById(c.id);
+                      // optional: if deleting active category, clear
+                      if (activeCategory?.id === c.id) setActiveCategory(null);
+                    }}
+                  >
+                    {d.categoryToDelete === c.id ? "Deleting..." : "Delete"}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-600">No categories yet.</p>
+        )}
+      </section>
+
+      {/* CATEGORY MODAL (ADD/EDIT) */}
+      {d.addCategoryModalOpen ? (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4">
+          <div className="bg-white border rounded p-4 w-full max-w-md space-y-3">
+            <div className="flex justify-between items-center">
+              <h3 className="font-semibold">
+                {d.categoryToEdit ? "Edit category" : "Add category"}
+              </h3>
+              <button onClick={d.closeAddCategoryModal}>✕</button>
             </div>
 
-            <div>
-              <label className="block text-sm text-gray-600 mb-1">
-                Income amount
-              </label>
+            <div className="space-y-2">
+              <input
+                value={d.categoryDraft.name}
+                onChange={(e) =>
+                  d.setCategoryDraft((prev) => ({
+                    ...prev,
+                    name: e.target.value,
+                  }))
+                }
+                className="w-full border rounded px-3 py-2"
+                placeholder="Name"
+              />
+
               <input
                 type="number"
-                value={incomeDraft}
-                onChange={(e) => setIncomeDraft(e.target.value)}
-                className="w-full border rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="e.g. 1500"
+                value={d.categoryDraft.default_budget}
+                onChange={(e) =>
+                  d.setCategoryDraft((prev) => ({
+                    ...prev,
+                    default_budget: e.target.value,
+                  }))
+                }
+                className="w-full border rounded px-3 py-2"
+                placeholder="Budget"
+              />
+
+              <input
+                value={d.categoryDraft.description}
+                onChange={(e) =>
+                  d.setCategoryDraft((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+                className="w-full border rounded px-3 py-2"
+                placeholder="Description (optional)"
               />
             </div>
 
-            <div className="flex gap-2 justify-end pt-2">
+            <div className="flex gap-2 justify-end">
               <button
-                className="px-4 py-2 rounded-md border hover:bg-gray-50"
-                onClick={closeIncomeModal}
+                className="px-3 py-2 border rounded"
+                onClick={d.closeAddCategoryModal}
               >
                 Cancel
               </button>
-
               <button
-                className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed"
-                onClick={saveIncome}
-                disabled={savingIncome}
+                className="px-3 py-2 rounded bg-gray-900 text-white disabled:opacity-60"
+                onClick={d.saveCategory}
+                disabled={d.savingCategory}
               >
-                {savingIncome ? "Saving..." : "Save"}
+                {d.savingCategory ? "Saving..." : "Save"}
               </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {/* TRANSACTION MODAL */}
+      {d.addTransactionModalOpen ? (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4">
+          <div className="bg-white border rounded p-4 w-full max-w-lg space-y-4">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="font-semibold">Transactions</h3>
+                <p className="text-sm text-gray-600">
+                  Category:{" "}
+                  <span className="font-medium">{activeCategory?.name}</span>
+                </p>
+              </div>
+              <button onClick={d.closeAddTransactionModal}>✕</button>
+            </div>
+
+            {/* Add tx form */}
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
+              <input
+                type="number"
+                value={d.transactionDraft.amount}
+                onChange={(e) =>
+                  d.setTransactionDraft((prev) => ({
+                    ...prev,
+                    amount: e.target.value,
+                  }))
+                }
+                className="border rounded px-3 py-2"
+                placeholder="Amount"
+              />
+              <input
+                type="date"
+                value={d.transactionDraft.date}
+                onChange={(e) =>
+                  d.setTransactionDraft((prev) => ({
+                    ...prev,
+                    date: e.target.value,
+                  }))
+                }
+                className="border rounded px-3 py-2"
+              />
+              <input
+                value={d.transactionDraft.description}
+                onChange={(e) =>
+                  d.setTransactionDraft((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+                className="border rounded px-3 py-2 sm:col-span-2"
+                placeholder="Description (optional)"
+              />
+            </div>
+
+            <div className="flex justify-end">
+              <button
+                onClick={d.createTransaction}
+                disabled={d.savingTransaction}
+                className="px-3 py-2 rounded bg-blue-600 text-white disabled:opacity-60"
+              >
+                {d.savingTransaction ? "Saving..." : "Add transaction"}
+              </button>
+            </div>
+
+            {d.transactionMsg ? (
+              <p className="text-sm text-gray-700">{d.transactionMsg}</p>
+            ) : null}
+            {d.transactionError ? (
+              <p className="text-sm text-red-700">{d.transactionError}</p>
+            ) : null}
+
+            {/* List tx */}
+            <div className="border rounded p-2">
+              <div className="text-sm font-medium mb-2">List</div>
+
+              {d.loadingTransactions ? (
+                <p className="text-gray-600">Loading...</p>
+              ) : activeTx.length ? (
+                <div className="space-y-2">
+                  {activeTx.map((t) => (
+                    <div
+                      key={t.id}
+                      className="flex items-center justify-between border rounded p-2"
+                    >
+                      <div className="text-sm">
+                        <div>
+                          <span className="font-medium">{t.amount}</span>{" "}
+                          <span className="text-gray-600">{t.date}</span>
+                        </div>
+                        {t.note ? (
+                          <div className="text-gray-600">{t.note}</div>
+                        ) : null}
+                      </div>
+
+                      <button
+                        className="px-2 py-1 border rounded text-red-700"
+                        disabled={d.transactionToDelete === t.id}
+                        onClick={() =>
+                          d.deleteTransactionById(t.id, activeCategory?.id)
+                        }
+                      >
+                        {d.transactionToDelete === t.id
+                          ? "Deleting..."
+                          : "Delete"}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-600">No transactions.</p>
+              )}
             </div>
           </div>
         </div>
