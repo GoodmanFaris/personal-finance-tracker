@@ -6,6 +6,9 @@ export const getTransaction = (id) =>
 export const listTransactions = () =>
   api.get("/transaction/list/").then(res => res.data);
 
+export const listTransactionsByCategory = (categoryId) =>
+  api.get(`/transaction/list-by-category/${categoryId}`).then(res => res.data);
+
 export const createTransaction = (data) =>
   api.post("/transaction/", data);
 
