@@ -4,7 +4,7 @@ export const getCategory = (id) =>
   api.get(`/category/${id}`).then(res => res.data);
 
 export const listCategoriesActive = () =>
-  api.get("/category/list/active").then(res => res.data);
+  api.get("/category/list_all/active").then(res => res.data);
 
 export const getCategoryByName = (name) =>
   api.get(`/category/name/${name}`).then(res => res.data);
