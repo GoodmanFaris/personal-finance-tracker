@@ -1,11 +1,14 @@
 from fastapi import FastAPI
 from sqlmodel import SQLModel, Session
 from app.core.database import engine
+#CORS middleware
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.models.user import User
 from app.models.transaction import Transaction
 from app.models.category import Category
 from app.models.income import Income
+from app.routes import summary
 
 
 app = FastAPI()
@@ -28,6 +31,18 @@ async def startup_event():
                 currency="BAM",
             ))
             session.commit()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ],
+    allow_methods=["*"],
+    allow_headers=["*"],
+    allow_credentials=True
+)
+
     
 
 @app.get("/health")
@@ -38,5 +53,5 @@ from app.routes import category, transaction, income
 app.include_router(category.router)
 app.include_router(transaction.router)
 app.include_router(income.router)
-from app.routes import summary
+
 app.include_router(summary.router)

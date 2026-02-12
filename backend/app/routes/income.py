@@ -50,7 +50,7 @@ def get_income(
 @router.put("/{month}", response_model=IncomeRead)
 def upsert_income_by_month(
     month: str,
-    income_data: IncomeCreate,
+    income_data: IncomeUpdate,
     session: Session = Depends(get_session)
 ):
     service = IncomeService(session)
