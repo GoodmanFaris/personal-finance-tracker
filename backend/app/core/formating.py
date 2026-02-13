@@ -40,3 +40,5 @@ def next_month(month: str) -> str:
         return f"{y+1:04d}-01"
     return f"{y:04d}-{m+1:02d}"
 
+def date_to_str_month(d: date) -> str:
+    return d.strftime("%Y-%m")

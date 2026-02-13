@@ -7,6 +7,7 @@ from app.repositories.income import IncomeRepository
 from app.schemas.income import IncomeCreate, IncomeRead, IncomeUpdate
 from app.core.validators import validate_month
 from app.core.formating import next_month
+from app.services.balance import BalanceService
 
 class IncomeService:
     def __init__(self, session: Session):
@@ -35,13 +36,13 @@ class IncomeService:
         if income_in.month is None:
             raise HTTPException(status_code=400, detail="Income month must be in format YYYY-MM")
 
-        
+        BalanceService(self.session).recompute_balance(user_id=user_id, month=income_in.month)
         return self.repository.create(data=income_in.dict(), user_id=user_id)
     
     def get_by_id(self, *, user_id: int, income_id: int) -> IncomeRead:
         return self.get_or_404(user_id=user_id, income_id=income_id)
     
-    def get_by_month(self, *, user_id: int, month: str) -> list[Optional[IncomeRead]]:
+    def get_by_month(self, *, user_id: int, month: str) -> Optional[IncomeRead]:#bilo prije List[Optional[IncomeRead]]
         validate_month(month)
         
         return self.repository.get_by_month(month=month, user_id=user_id)
@@ -54,6 +55,7 @@ class IncomeService:
         if month is None:
             raise HTTPException(status_code=400, detail="Income month must be in format YYYY-MM")
         
+        BalanceService(self.session).recompute_balance(user_id=user_id, month=month)
         return self.repository.upsert_by_month(month=month, amount=amount, user_id=user_id)
 
     def update(self, *, user_id: int, income_id: int, payload: IncomeUpdate) -> IncomeRead:
@@ -63,10 +65,7 @@ class IncomeService:
             if payload.amount < 0:
                 raise HTTPException(status_code=400, detail="Income amount cannot be negative")
             obj.amount = payload.amount
-
-        if payload.month is not None:
-            payload.month = validate_month(payload.month)
-
+        BalanceService(self.session).recompute_balance(user_id=user_id, month=obj.month)
         return self.repository.update(obj)
     
     def list_incomes_by_time_period(self, *, user_id: int, date_from: str, date_to: str) -> list[IncomeRead]:
@@ -86,5 +85,6 @@ class IncomeService:
     
     def delete(self, *, user_id: int, income_id: int) -> None:
         obj = self.get_or_404(user_id=user_id, income_id=income_id)
+        BalanceService(self.session).recompute_balance(user_id=user_id, month=obj.month)
         self.repository.delete(obj)
         return

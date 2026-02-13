@@ -3,8 +3,9 @@ from sqlmodel import Session
 from app.models.transaction import Transaction
 from app.repositories.transaction import TransactionRepository
 from app.schemas.transaction import TransactionCreate, TransactionRead, TransactionUpdate
-from app.core.formating import month_to_date_range
+from app.core.formating import date_to_str_month, month_to_date_range
 from app.repositories.category import CategoryRepository
+from app.services.balance import BalanceService
 
 
 class TransactionService:
@@ -46,11 +47,12 @@ class TransactionService:
             category.default_budget -= transaction_in.amount
         elif transaction_in.type == "income":
             category.default_budget += transaction_in.amount
-
+        BalanceService(self.session).recompute_balance(user_id=user_id, month=date_to_str_month(transaction_in.date))
         return self.repository.create(data=transaction_in.dict(), user_id=user_id)
     
     def delete(self, *, user_id: int, transaction_id: int) -> TransactionRead:
         obj = self.get_or_404(user_id=user_id, transaction_id=transaction_id)
+        BalanceService(self.session).recompute_balance(user_id=user_id, month=date_to_str_month(obj.date))
         return self.repository.delete(transaction=obj)
     
     def update(self, *, user_id: int, transaction_id: int, payload: TransactionUpdate) -> TransactionRead:
@@ -76,6 +78,8 @@ class TransactionService:
 
         if payload.date is not None:
             obj.date = payload.date
+
+        BalanceService(self.session).recompute_balance(user_id=user_id, month=date_to_str_month(obj.date))
 
         return self.repository.update(obj)
     
