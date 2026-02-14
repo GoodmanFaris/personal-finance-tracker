@@ -4,8 +4,8 @@ import useIncomeData from "./useIncomeData";
 import useCategoryTransactionData from "./useCategoryTransactionData";
 
 export default function useDashboardData() {
-  const income = useIncomeData(); // current month (internal)
-  const catTx = useCategoryTransactionData(); // categories + tx
+  const income = useIncomeData(); 
+  const catTx = useCategoryTransactionData(); 
 
   return {
     ...income,

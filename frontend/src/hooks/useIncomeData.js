@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { updateIncomesByMonth, getIncomesByMonth } from "../lib/income";
+import { getBalance } from "../lib/balance";
 
 const pad2 = (n) => String(n).padStart(2, "0");
 
@@ -27,7 +28,7 @@ export default function useIncomeData(monthKeyProp) {
     const [incomeError, setIncomeError] = useState("");
     const [incomeMsg, setIncomeMsg] = useState("");
 
-    const balance = useMemo(() => Number(income) || 0, [income]);
+    const [balance, setBalance] = useState(0);
 
     const RefreshIncome = async () => {
       setIncomeError("");
@@ -36,6 +37,7 @@ export default function useIncomeData(monthKeyProp) {
       try {
         setLoadingIncome(true);
         const data = await getIncomesByMonth(monthKey);
+        const balanceData = await getBalance(); 
 
         let amount = 0;
         if (data && typeof data.amount !== "undefined")
@@ -43,6 +45,7 @@ export default function useIncomeData(monthKeyProp) {
         else if (typeof data === "number") amount = Number(data);
 
         setIncome(Number.isFinite(amount) ? amount : 0);
+        setBalance(balanceData?.amount ?? 0);
       } catch (err) {
         const status = err?.response?.status;
         if (status === 404) {
@@ -91,6 +94,7 @@ export default function useIncomeData(monthKeyProp) {
         setIncomeError("Failed to save income.");
       } finally {
         setSavingIncome(false);
+        RefreshIncome();
       }
     };
 
@@ -107,5 +111,7 @@ export default function useIncomeData(monthKeyProp) {
       closeIncomeModal,
       saveIncome,
       setIncomeDraft,
+      balance,
+      RefreshIncome
     };
 }

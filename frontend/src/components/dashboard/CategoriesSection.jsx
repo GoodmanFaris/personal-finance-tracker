@@ -60,7 +60,7 @@ export default function CategoriesSection({ d, onOpenTransactions }) {
                     <p className="text-sm text-gray-600 mt-1">
                       Budget:{" "}
                       <span className="font-semibold text-gray-900">
-                        {c.default_budget ?? c.budget ?? 0}
+                        {c.budget ?? c.default_budget ?? 0}
                       </span>
                     </p>
                     {c.description ? (
