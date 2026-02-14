@@ -55,11 +55,11 @@ export default function CategoryModal({ d }) {
             </label>
             <input
               type="number"
-              value={d.categoryDraft?.budget ?? ""}
+              value={d.categoryDraft?.default_budget ?? ""}
               onChange={(e) =>
                 d.setCategoryDraft((prev) => ({
                   ...prev,
-                  budget: e.target.value,
+                  default_budget: e.target.value,
                 }))
               }
               className="w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"

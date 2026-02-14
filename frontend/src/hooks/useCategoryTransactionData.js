@@ -74,23 +74,19 @@ export default function useCategoryTransactionData() {
       setCategoryMsg("");
 
       const name = categoryDraft.name?.trim();
-      const budgetNum =
-        categoryDraft.default_budget === "" ? 0 : Number(categoryDraft.default_budget);
+      const defaultBudgetNum = Number(categoryDraft.default_budget);
+      const budgetNum = categoryDraft.budget;
       const description = categoryDraft.description?.trim() || "";
 
       if (!name) {
         setCategoryError("Category name is required.");
         return;
       }
-      if (!Number.isFinite(budgetNum)) {
-        setCategoryError("Budget must be a number.");
-        return;
-      }
 
       try {
         setSavingCategory(true);
 
-        const payload = { name, default_budget: budgetNum, description };
+        const payload = { name, default_budget: defaultBudgetNum, budget: budgetNum, description };
 
         if (categoryToEdit) {
           await updateCategory(categoryToEdit.id, payload);
@@ -134,6 +130,7 @@ export default function useCategoryTransactionData() {
       setCategoryDraft({
         name: category.name ?? "",
         default_budget: String(category.default_budget ?? 0),
+        budget: category.budget ?? category.default_budget ?? 0,
         description: category.description ?? "",
       });
 
