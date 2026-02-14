@@ -3,8 +3,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { listCategoriesActive, createCategory, deleteCategory, updateCategory } from "../lib/categories";
 import { listTransactionsByCategory, deleteTransaction, createTransaction as createTransactionApi } from "../lib/transactions";
+import useIncomeData from "./useIncomeData";
 
 export default function useCategoryTransactionData() {
+    const incomeData = useIncomeData(); 
     const [categories, setCategories] = useState([]);
     const [loadingCategories, setLoadingCategories] = useState(false);
     const [savingCategory, setSavingCategory] = useState(false);
@@ -120,6 +122,7 @@ export default function useCategoryTransactionData() {
         setCategoryError("Failed to delete category.");
       } finally {
         setCategoryToDelete(null);
+        incomeData.RefreshIncome();
       }
     };
 
@@ -185,6 +188,7 @@ export default function useCategoryTransactionData() {
               date: transactionDraft.date,
               description: (transactionDraft.description || "").trim(),
             });
+          incomeData.RefreshIncome();
           setTransactionMsg("Transaction saved.");
           setAddTransactionModalOpen(false);
           await loadTransactionsByCategory(categoryId);
@@ -199,6 +203,7 @@ export default function useCategoryTransactionData() {
             description: "",
           });
           setSavingTransaction(false);
+          incomeData.RefreshIncome();
         }
     };
 
@@ -235,6 +240,7 @@ export default function useCategoryTransactionData() {
         setTransactionError("Failed to delete transaction.");
       } finally {
         setTransactionToDelete(null);
+        incomeData.RefreshIncome();
       }
     };
 

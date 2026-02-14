@@ -10,14 +10,14 @@ export default function IncomeCard({ d }) {
           <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">
             {d.monthKey || "Current month"}
           </h1>
-          <p className="text-white/80 text-sm">Balance (for now = income)</p>
+          <p className="text-white/80 text-sm">Balance</p>
         </div>
 
         {/* Right: numbers + button */}
         <div className="sm:text-right flex flex-col gap-3">
           <div>
             <p className="text-3xl sm:text-4xl font-bold leading-none">
-              {d.loadingIncome ? "Loading..." : d.balance}
+              {d.loadingIncome ? "Loading..." : d.balance !== null ? `$${d.balance.toLocaleString()}` : "N/A"}
             </p>
             <p className="text-white/80 text-sm mt-1">
               Income: <span className="font-medium text-white">{d.income}</span>
