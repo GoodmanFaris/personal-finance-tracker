@@ -1,6 +1,8 @@
 from typing import Optional, List
 from sqlmodel import Session, select
 from app.models.transaction import Transaction
+from app.core.formating import month_to_date_range
+from datetime import date
 
 class TransactionRepository:
     def __init__(self, session: Session):
@@ -29,9 +31,26 @@ class TransactionRepository:
         return results
     
     def list_by_month(self, *, month: str, user_id: int) -> List[Transaction]:
-        statement = select(Transaction).where(Transaction.date.startswith(month), Transaction.user_id == user_id).order_by(Transaction.date)
-        results = self.session.exec(statement).all()
-        return results
+        y, m = map(int, month.split("-"))  # "2029-12" -> 2029, 12
+        start = date(y, m, 1)
+
+        # first day of next month
+        if m == 12:
+            end = date(y + 1, 1, 1)
+        else:
+            end = date(y, m + 1, 1)
+
+        statement = (
+            select(Transaction)
+            .where(
+                Transaction.user_id == user_id,
+                Transaction.date >= start,
+                Transaction.date < end,
+            )
+            .order_by(Transaction.date)
+        )
+
+        return self.session.exec(statement).all()
     
     def get_by_desc(self, *, description: str, user_id: int) -> List[Transaction]:
         statement = select(Transaction).where(Transaction.description.contains(description), Transaction.user_id == user_id).order_by(Transaction.id)

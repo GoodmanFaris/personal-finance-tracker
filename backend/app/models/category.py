@@ -6,6 +6,7 @@ class Category(SQLModel, table=True):
     name: str = Field(index=True)
     user_id: int = Field(foreign_key="user.id")
     default_budget: float = 0.0
+    budget: Optional[float] = 0.0
     description: Optional[str] = ""
     active: bool = True
 

@@ -24,6 +24,11 @@ class BalanceRepository:
         result = self.session.exec(statement).first()
         return result
     
+    def get_all(self, *, user_id: int) -> list[Balance]:
+        statement = select(Balance).where(Balance.user_id == user_id).order_by(Balance.month.desc())
+        result = self.session.exec(statement).all()
+        return result
+    
     def update(self, balance: Balance) -> Balance:
         self.session.add(balance)
         self.session.commit()

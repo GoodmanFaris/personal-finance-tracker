@@ -38,13 +38,8 @@ def get_income(
 ):
 
     service = IncomeService(session)
-    list = service.get_by_month(user_id=CURRENT_USER_ID, month=month)
-    if not list:
-        raise HTTPException(status_code=404, detail="Income for the specified month not found")
-    return service.get_by_month(
-        user_id=CURRENT_USER_ID,
-        month=month,
-    )
+    #lazy get and/or create
+    return service.get_or_create_for_lazy(user_id=CURRENT_USER_ID, month=month)
 
 
 @router.put("/{month}", response_model=IncomeRead)

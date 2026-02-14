@@ -1,9 +1,13 @@
+from datetime import date
 from fastapi import HTTPException
 from sqlmodel import Session
 
 from app.models.category import Category
 from app.repositories.category import CategoryRepository
 from app.schemas.category import CategoryCreate, CategoryRead, CategoryUpdate
+
+global Already_reset
+Already_reset = 1
 
 class CategoryService:
     def __init__(self, session: Session):
@@ -30,8 +34,9 @@ class CategoryService:
             existing_category.default_budget = category_in.default_budget
             existing_category.description = category_in.description
             existing_category.name = category_in.name
+            existing_category.budget = category_in.default_budget
             return self.repository.update(existing_category)
-        
+        category_in.budget = category_in.default_budget
         return self.repository.create(data=category_in.dict(), user_id=user_id)
 
     def list_categories(self, *, user_id: int) -> list[CategoryRead]:
@@ -56,12 +61,15 @@ class CategoryService:
             if payload.default_budget < 0:
                 raise HTTPException(status_code=400, detail="Default budget cannot be negative")
             obj.default_budget = payload.default_budget
+            obj.budget = payload.default_budget
 
         if payload.description is not None:
             obj.description = payload.description
 
         if payload.active is not None:
             obj.active = payload.active
+
+        
 
         return self.repository.update(obj)
 
@@ -100,3 +108,29 @@ class CategoryService:
         if category is None or not category.active:
             raise HTTPException(status_code=404, detail="Category not found")
         return category
+    
+    def copy_monthly_reset(self, *, user_id: int) -> list[CategoryRead]:
+        global Already_reset
+        current_categories = self.list_categories(user_id=user_id)
+        current_date = date.today()
+        if(current_date.day == 2):
+            Already_reset = 1;
+        elif(current_date.day != 1):
+            return current_categories
+        elif(Already_reset == 2):
+            return current_categories
+        else:
+            for category in current_categories:
+                oldName = category.name
+                category.name = f"{category.name} - {current_date.strftime('%B %Y')}"
+                self.create(user_id=user_id, category_in=CategoryCreate(
+                    name=oldName,
+                    description=category.description,
+                    default_budget=category.default_budget,
+                    budget=category.default_budget
+                ))
+                category.active = False
+                self.repository.update(category)
+            Already_reset = 2
+        
+        return self.list_categories(user_id=user_id)
