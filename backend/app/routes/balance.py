@@ -18,6 +18,16 @@ def create_balance(
     balance = service.create(user_id=CURRENT_USER_ID, balance_in=balance_data)
     return balance
 
+@router.get("/", response_model=BalanceRead)
+def get_current_balance(
+    session: Session = Depends(get_session)
+):
+    service = BalanceService(session)
+    balance = service.get_current(user_id=CURRENT_USER_ID)
+    if not balance:
+        raise HTTPException(status_code=404, detail="Current balance record not found")
+    return balance
+
 @router.get("/{balance_id}", response_model=BalanceRead)
 def get_balance(
     balance_id: int,

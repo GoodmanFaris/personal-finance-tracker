@@ -18,6 +18,7 @@ class BalanceRepository:
         statement = select(Balance).where(Balance.id == balance_id, Balance.user_id == user_id)
         result = self.session.exec(statement).first()
         return result
+
     
     def get_by_month(self, *, month: str, user_id: int) -> Optional[Balance]:
         statement = select(Balance).where(Balance.month == month, Balance.user_id == user_id)

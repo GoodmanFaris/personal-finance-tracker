@@ -7,6 +7,7 @@ from app.models.balance import Balance
 from app.repositories.balance import BalanceRepository
 from app.schemas.balance import BalanceCreate, BalanceRead, BalanceUpdate
 from app.core.validators import validate_month
+from app.core.formating import current_month_key
 
 class BalanceService:
     def __init__(self, session: Session):
@@ -18,6 +19,11 @@ class BalanceService:
         if obj is None:
             raise HTTPException(status_code=404, detail="Balance record not found")
         return obj
+    
+    def get_current(self, *, user_id: int) -> Optional[BalanceRead]:
+        current_month = current_month_key()
+        return self.repository.get_by_month(user_id=user_id, month=current_month)
+
     
     def get(self, *, user_id: int, balance_id: int) -> list[BalanceRead]:
         return self.repository.get_all(user_id=user_id, balance_id=balance_id)
