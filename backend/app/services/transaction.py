@@ -42,18 +42,20 @@ class TransactionService:
             if category is None or not category.active:
                 raise HTTPException(status_code=400, detail="Category is inactive or does not exist")
             
-        # if transaction is expense then default_budget = default_budget - amount, if income then default_budget = default_budget + amount
+        # if transaction is expense then budget = budget - amount, if income then budget = budget + amount
         if transaction_in.type == "expense":
-            category.default_budget -= transaction_in.amount
+            category.budget -= transaction_in.amount
         elif transaction_in.type == "income":
-            category.default_budget += transaction_in.amount
+            category.budget += transaction_in.amount
+        objFin = self.repository.create(data=transaction_in.dict(), user_id=user_id)
         BalanceService(self.session).recompute_balance(user_id=user_id, month=date_to_str_month(transaction_in.date))
-        return self.repository.create(data=transaction_in.dict(), user_id=user_id)
+        return objFin
     
     def delete(self, *, user_id: int, transaction_id: int) -> TransactionRead:
         obj = self.get_or_404(user_id=user_id, transaction_id=transaction_id)
+        objFin = self.repository.delete(transaction=obj)
         BalanceService(self.session).recompute_balance(user_id=user_id, month=date_to_str_month(obj.date))
-        return self.repository.delete(transaction=obj)
+        return objFin
     
     def update(self, *, user_id: int, transaction_id: int, payload: TransactionUpdate) -> TransactionRead:
         obj = self.get_or_404(user_id=user_id, transaction_id=transaction_id)
@@ -78,10 +80,10 @@ class TransactionService:
 
         if payload.date is not None:
             obj.date = payload.date
-
+        objFin = self.repository.update(obj)
         BalanceService(self.session).recompute_balance(user_id=user_id, month=date_to_str_month(obj.date))
 
-        return self.repository.update(obj)
+        return objFin
     
     def list_transactions_by_month(self, *, user_id: int, month: str) -> list[TransactionRead]:
         return self.repository.list_by_month(month=month, user_id=user_id)

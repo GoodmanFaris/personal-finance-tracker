@@ -19,9 +19,11 @@ class BalanceService:
             raise HTTPException(status_code=404, detail="Balance record not found")
         return obj
     
-    def get(self, *, user_id: int) -> list[BalanceRead]:
-        service = BalanceService(self.session)
-        return service.get_or_404(user_id=user_id)
+    def get(self, *, user_id: int, balance_id: int) -> list[BalanceRead]:
+        return self.repository.get_all(user_id=user_id, balance_id=balance_id)
+    
+    def get_by_id(self, *, user_id: int, balance_id: int) -> BalanceRead:
+        return self.get_or_404(user_id=user_id, balance_id=balance_id)
     
     def create(self, *, user_id: int, balance_in: BalanceCreate) -> BalanceRead:
         if balance_in.amount < 0:
@@ -56,19 +58,23 @@ class BalanceService:
     def delete(self, *, user_id: int, balance_id: int) -> None:
         obj = self.get_or_404(user_id=user_id, balance_id=balance_id)
         self.repository.delete(balance=obj)
+    
+    def get_all(self, *, user_id: int) -> list[BalanceRead]:
+        balances = self.repository.get_all(user_id=user_id)
+        return balances
 
     def recompute_balance(self, *, user_id: int, month: str) -> None:
         from app.services.income import IncomeService
         from app.services.transaction import TransactionService
         
         income_obj = IncomeService(self.session).get_by_month(user_id=user_id, month=month)
-        income_amount = Decimal(str(income_obj.amount)) if income_obj else Decimal("0")
+        income_amount = income_obj.amount if income_obj else 0.0
 
         txs = TransactionService(self.session).list_transactions_by_month(user_id=user_id, month=month) or []
-        net = Decimal("0")
+        net = 0.0
 
         for t in txs:
-            amt = Decimal(str(t.amount))
+            amt = t.amount
             if getattr(t, "type", None) == "expense":
                 net -= amt
             else:
@@ -84,6 +90,5 @@ class BalanceService:
         else:
             self.repository.create(
                 user_id=user_id,
-                month=month,
-                amount=new_amount
+                data={"month": month, "amount": new_amount},
             )

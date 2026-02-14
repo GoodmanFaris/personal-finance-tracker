@@ -84,7 +84,7 @@ def list_all_categories(
     session: Session = Depends(get_session)
 ):
     service = CategoryService(session)
-    categories = service.list_categories(user_id=CURRENT_USER_ID)
+    categories = service.copy_monthly_reset(user_id=CURRENT_USER_ID)
     return categories
 
 @router.get("/list_all/inactive/active", response_model=list[CategoryRead])

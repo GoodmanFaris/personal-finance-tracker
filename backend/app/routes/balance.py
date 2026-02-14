@@ -29,6 +29,12 @@ def get_balance(
         raise HTTPException(status_code=404, detail="Balance record not found")
     return balance
 
+@router.get("/list/all", response_model=list[BalanceRead])
+def get_all_balances(
+    session: Session = Depends(get_session)
+):
+    service = BalanceService(session)
+    return service.get_all(user_id=CURRENT_USER_ID)
 
 @router.put("/{balance_id}", response_model=BalanceRead)
 def update_balance(

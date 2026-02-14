@@ -2,7 +2,6 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 class BalanceCreate(BaseModel):
-    user_id: int
     amount: float
     month: str 
 

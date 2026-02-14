@@ -6,7 +6,7 @@ from app.models.income import Income
 from app.repositories.income import IncomeRepository
 from app.schemas.income import IncomeCreate, IncomeRead, IncomeUpdate
 from app.core.validators import validate_month
-from app.core.formating import next_month
+from app.core.formating import current_month_key, next_month, previous_month_key
 from app.services.balance import BalanceService
 
 class IncomeService:
@@ -30,14 +30,14 @@ class IncomeService:
         
         existing_income = self.repository.get_by_month(month=income_in.month, user_id=user_id)
         if existing_income:
-            income_in.amount += existing_income[0].amount
+            income_in.amount += existing_income.amount
 
         income_in.month = validate_month(income_in.month)
         if income_in.month is None:
             raise HTTPException(status_code=400, detail="Income month must be in format YYYY-MM")
-
+        obj = self.repository.create(data=income_in.dict(), user_id=user_id)
         BalanceService(self.session).recompute_balance(user_id=user_id, month=income_in.month)
-        return self.repository.create(data=income_in.dict(), user_id=user_id)
+        return obj
     
     def get_by_id(self, *, user_id: int, income_id: int) -> IncomeRead:
         return self.get_or_404(user_id=user_id, income_id=income_id)
@@ -54,9 +54,9 @@ class IncomeService:
         month = validate_month(month)
         if month is None:
             raise HTTPException(status_code=400, detail="Income month must be in format YYYY-MM")
-        
+        obj = self.repository.upsert_by_month(month=month, amount=amount, user_id=user_id)
         BalanceService(self.session).recompute_balance(user_id=user_id, month=month)
-        return self.repository.upsert_by_month(month=month, amount=amount, user_id=user_id)
+        return obj 
 
     def update(self, *, user_id: int, income_id: int, payload: IncomeUpdate) -> IncomeRead:
         obj = self.get_or_404(user_id=user_id, income_id=income_id)
@@ -65,8 +65,9 @@ class IncomeService:
             if payload.amount < 0:
                 raise HTTPException(status_code=400, detail="Income amount cannot be negative")
             obj.amount = payload.amount
+        objFin = self.repository.update(obj)
         BalanceService(self.session).recompute_balance(user_id=user_id, month=obj.month)
-        return self.repository.update(obj)
+        return objFin
     
     def list_incomes_by_time_period(self, *, user_id: int, date_from: str, date_to: str) -> list[IncomeRead]:
         validate_month(date_from)
@@ -88,3 +89,28 @@ class IncomeService:
         BalanceService(self.session).recompute_balance(user_id=user_id, month=obj.month)
         self.repository.delete(obj)
         return
+    
+    def get_or_create_for_lazy(self, *, user_id: int, month: str) -> IncomeRead:
+        income = self.repository.get_by_month(user_id=user_id, month=month)
+
+        if income:
+            return income
+
+        # LAZY CREATE
+        prev_month = previous_month_key(month)
+        prev_income = self.repository.get_by_month(user_id=user_id, month=prev_month)
+
+        new_amount = prev_income.amount if prev_income else 0
+
+        income = self.upsert_by_month(
+            user_id=user_id,
+            month=month,
+            amount=new_amount,
+        )
+
+        BalanceService(self.session).recompute_balance(
+            user_id=user_id,
+            month=month,
+        )
+
+        return income

@@ -42,3 +42,16 @@ def next_month(month: str) -> str:
 
 def date_to_str_month(d: date) -> str:
     return d.strftime("%Y-%m")
+
+from datetime import datetime
+
+def current_month_key() -> str:
+    now = datetime.now()
+    return f"{now.year}-{str(now.month).zfill(2)}"
+
+
+def previous_month_key(month: str) -> str:
+    year, month_num = map(int, month.split("-"))
+    if month_num == 1:
+        return f"{year - 1}-12"
+    return f"{year}-{str(month_num - 1).zfill(2)}"
