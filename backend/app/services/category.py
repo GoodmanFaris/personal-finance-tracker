@@ -5,6 +5,8 @@ from sqlmodel import Session
 from app.models.category import Category
 from app.repositories.category import CategoryRepository
 from app.schemas.category import CategoryCreate, CategoryRead, CategoryUpdate
+from app.services.balance import BalanceService
+from app.core.formating import date_to_str_month
 
 global Already_reset
 Already_reset = 1
@@ -76,9 +78,12 @@ class CategoryService:
     def delete(self, *, user_id: int, category_id: int) -> None:
         category = self.get_or_404(user_id=user_id, category_id=category_id)
 
+        #current date in format YYYY-MM
+        #current_month = date_to_str_month(date.today())
+
         if not category.active:
             raise HTTPException(status_code=400, detail="Category is already inactive")
-        
+        #BalanceService(self.session).recompute_balance(user_id=user_id, month=current_month)
         self.repository.delete(category=category)
 
     def restore(self, *, user_id: int, category_id: int) -> CategoryRead:
@@ -86,17 +91,19 @@ class CategoryService:
 
         if category.active:
             return category
-        
+        #current_month = date_to_str_month(date.today())
         category.active = True
+        #BalanceService(self.session).recompute_balance(user_id=user_id, month=current_month)
         return self.repository.update(category)
     
     def deactivate(self, *, user_id: int, category_id: int) -> CategoryRead:
         category = self.get_or_404(user_id=user_id, category_id=category_id)
-
+        #current_month = date_to_str_month(date.today())
         if not category.active:
             return category
         
         category.active = False
+        #BalanceService(self.session).recompute_balance(user_id=user_id, month=current_month)
         return self.repository.update(category)
     
     def get_by_id(self, *, user_id: int, category_id: int) -> CategoryRead:

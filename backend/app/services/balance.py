@@ -72,6 +72,7 @@ class BalanceService:
     def recompute_balance(self, *, user_id: int, month: str) -> None:
         from app.services.income import IncomeService
         from app.services.transaction import TransactionService
+        from app.services.category import CategoryService
         
         income_obj = IncomeService(self.session).get_by_month(user_id=user_id, month=month)
         income_amount = income_obj.amount if income_obj else 0.0
@@ -80,6 +81,7 @@ class BalanceService:
         net = 0.0
 
         for t in txs:
+            
             amt = t.amount
             if getattr(t, "type", None) == "expense":
                 net -= amt

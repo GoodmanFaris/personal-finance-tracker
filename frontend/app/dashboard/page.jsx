@@ -16,7 +16,7 @@ export default function DashboardPage() {
   const [activeCategory, setActiveCategory] = useState(null);
 
   return (
-    <div className="max-w-5xl mx-auto p-6 space-y-6">
+    <div className="max-w-6xl mx-auto p-6 space-y-6">
       <IncomeCard d={d} />
       <CategoriesSection
         d={d}

@@ -58,8 +58,18 @@ export default function useIncomeData(monthKeyProp) {
       }
   };
 
+  const RefreshBalance = async () => {
+    try {
+      const balanceData = await getBalance();
+      setBalance(balanceData?.amount ?? 0);
+    } catch (err) {
+      // Ignore balance loading errors for now
+    }
+  };
+
   useEffect(() => {
     RefreshIncome();
+    RefreshBalance();
   }, [monthKey]);
 
   const openIncomeModal = () => {
@@ -95,6 +105,7 @@ export default function useIncomeData(monthKeyProp) {
       } finally {
         setSavingIncome(false);
         RefreshIncome();
+        RefreshBalance();
       }
     };
 
@@ -111,7 +122,7 @@ export default function useIncomeData(monthKeyProp) {
       closeIncomeModal,
       saveIncome,
       setIncomeDraft,
-      balance,
-      RefreshIncome
+      RefreshIncome,
+      RefreshBalance,
     };
 }
