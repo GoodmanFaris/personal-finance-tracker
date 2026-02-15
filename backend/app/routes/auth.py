@@ -28,8 +28,6 @@ def login(data: UserLogin, session: Session = Depends(get_session)):
 
 @router.post("/logout", status_code=204)
 def logout():
-    # For JWT, logout is typically handled on the client side by deleting the token.
-    # Optionally, you could implement token blacklisting here.
     return
 
 @router.get("/me", response_model=UserPublic)

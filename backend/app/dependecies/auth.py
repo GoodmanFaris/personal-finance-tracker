@@ -32,8 +32,6 @@ def get_current_user(
         if user_id is None:
             raise HTTPException(401, "Invalid authentication credentials")
         
-        
-
         try:
             user_id = int(user_id)
         except ValueError:
