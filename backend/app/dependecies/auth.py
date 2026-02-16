@@ -10,7 +10,7 @@ from app.models.user import User
 from app.repositories.user import UserRepository
 from app.schemas.user import UserRegister, UserPublic, UserUpdate
 from app.core.password_hash import password_hash, verify_password
-from backend.app.core.database import get_session
+from app.core.database import get_session
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
