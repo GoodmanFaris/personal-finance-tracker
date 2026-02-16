@@ -10,6 +10,7 @@ from app.models.category import Category
 from app.models.income import Income
 from app.routes import summary
 from app.routes import balance
+from app.routes import auth
 
 
 app = FastAPI()
@@ -55,5 +56,6 @@ app.include_router(category.router)
 app.include_router(transaction.router)
 app.include_router(income.router)
 app.include_router(balance.router)
+app.include_router(auth.router)
 
 app.include_router(summary.router)

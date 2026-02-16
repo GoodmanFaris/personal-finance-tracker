@@ -5,20 +5,21 @@ from sqlmodel import Session
 from app.core.database import get_session
 from app.services.summary import SummaryService
 from app.schemas.summary import ExpensesByCategory
+from app.dependecies.auth import get_current_user
+from app.schemas.user import UserPublic
 
 router = APIRouter(prefix="/summary", tags=["summary"])
-
-USER_ID = 1
 
 @router.get("/get_expenses_by_category", response_model=List[ExpensesByCategory])
 def get_expenses_by_category(
     start_date: str,
     end_date: str,
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
+    current_user: UserPublic = Depends(get_current_user)
 ):
     service = SummaryService(session)
     return service.get_expenses_by_category(
-        user_id=USER_ID,  # Placeholder for authenticated user ID
+        user_id=current_user.id,
         start_date=start_date,
         end_date=end_date
     )
@@ -27,11 +28,12 @@ def get_expenses_by_category(
 def get_total_expenses(
     start_date: str,
     end_date: str,
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
+    current_user: UserPublic = Depends(get_current_user)
 ):
     service = SummaryService(session)
     return service.get_total_expenses(
-        user_id=USER_ID,  # Placeholder for authenticated user ID
+        user_id=current_user.id,
         start_date=start_date,
         end_date=end_date
     )

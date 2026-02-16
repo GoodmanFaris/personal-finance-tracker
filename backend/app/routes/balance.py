@@ -4,26 +4,28 @@ from sqlmodel import Session
 from app.core.database import get_session
 from app.services.balance import BalanceService
 from app.schemas.balance import BalanceCreate, BalanceRead, BalanceUpdate
-
-CURRENT_USER_ID = 1  # Placeholder for authenticated user ID
+from app.dependecies.auth import get_current_user
+from app.schemas.user import UserPublic
 
 router = APIRouter(prefix="/balance", tags=["balance"])
 
 @router.post("/", response_model=BalanceRead, status_code=201)
 def create_balance(
     balance_data: BalanceCreate,
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
+    current_user: UserPublic = Depends(get_current_user)
 ):
     service = BalanceService(session)
-    balance = service.create(user_id=CURRENT_USER_ID, balance_in=balance_data)
+    balance = service.create(user_id=current_user.id, balance_in=balance_data)
     return balance
 
 @router.get("/", response_model=BalanceRead)
 def get_current_balance(
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
+    current_user: UserPublic = Depends(get_current_user)
 ):
     service = BalanceService(session)
-    balance = service.get_current(user_id=CURRENT_USER_ID)
+    balance = service.get_current(user_id=current_user.id)
     if not balance:
         raise HTTPException(status_code=404, detail="Current balance record not found")
     return balance
@@ -31,31 +33,34 @@ def get_current_balance(
 @router.get("/{balance_id}", response_model=BalanceRead)
 def get_balance(
     balance_id: int,
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
+    current_user: UserPublic = Depends(get_current_user)
 ):
     service = BalanceService(session)
-    balance = service.get_by_id(balance_id=balance_id, user_id=CURRENT_USER_ID)
+    balance = service.get_by_id(balance_id=balance_id, user_id=current_user.id)
     if not balance:
         raise HTTPException(status_code=404, detail="Balance record not found")
     return balance
 
 @router.get("/list/all", response_model=list[BalanceRead])
 def get_all_balances(
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
+    current_user: UserPublic = Depends(get_current_user)
 ):
     service = BalanceService(session)
-    return service.get_all(user_id=CURRENT_USER_ID)
+    return service.get_all(user_id=current_user.id)
 
 @router.put("/{balance_id}", response_model=BalanceRead)
 def update_balance(
     balance_id: int,
     balance_data: BalanceUpdate,
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
+    current_user: UserPublic = Depends(get_current_user)
 ):
     service = BalanceService(session)
     balance = service.update(
         balance_id=balance_id,
-        user_id=CURRENT_USER_ID,
+        user_id=current_user.id,
         payload=balance_data
     )
     if not balance:
@@ -66,20 +71,22 @@ def update_balance(
 @router.delete("/{balance_id}", status_code=204)
 def delete_balance(
     balance_id: int,
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
+    current_user: UserPublic = Depends(get_current_user)
 ):
     service = BalanceService(session)
-    balance = service.delete(balance_id=balance_id, user_id=CURRENT_USER_ID)
+    balance = service.delete(balance_id=balance_id, user_id=current_user.id)
     if not balance:
         raise HTTPException(status_code=404, detail="Balance record not found")
     return balance
 
 def get_balance_by_month(
     month: str,
-    session: Session = Depends(get_session)
+    session: Session = Depends(get_session),
+    current_user: UserPublic = Depends(get_current_user)
 ):
     service = BalanceService(session)
-    balance = service.get_by_month(month=month, user_id=CURRENT_USER_ID)
+    balance = service.get_by_month(month=month, user_id=current_user.id)
     if not balance:
         raise HTTPException(status_code=404, detail="Balance record not found for the specified month")
     return balance
