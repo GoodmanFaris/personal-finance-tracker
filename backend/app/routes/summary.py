@@ -24,6 +24,20 @@ def get_expenses_by_category(
         end_date=end_date
     )
 
+@router.get("/get_total_transactions", response_model=int)
+def get_total_transactions(
+    start_date: str,
+    end_date: str,
+    session: Session = Depends(get_session),
+    current_user: UserPublic = Depends(get_current_user)
+):
+    service = SummaryService(session)
+    return service.get_total_transactions(
+        user_id=current_user.id,
+        start_month=start_date,
+        end_month=end_date
+    )
+
 @router.get("/get_total_expenses", response_model=float)
 def get_total_expenses(
     start_date: str,
@@ -33,6 +47,20 @@ def get_total_expenses(
 ):
     service = SummaryService(session)
     return service.get_total_expenses(
+        user_id=current_user.id,
+        start_date=start_date,
+        end_date=end_date
+    )
+
+@router.get("/get_total_income", response_model=float)
+def get_total_income(
+    start_date: str,
+    end_date: str,
+    session: Session = Depends(get_session),
+    current_user: UserPublic = Depends(get_current_user)
+):
+    service = SummaryService(session)
+    return service.get_total_income(
         user_id=current_user.id,
         start_date=start_date,
         end_date=end_date

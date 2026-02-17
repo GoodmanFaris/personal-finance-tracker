@@ -23,6 +23,12 @@ class UserRepository:
         self.session.refresh(user)
         return user
     
+    def update(self, user: User) -> User:
+        self.session.add(user)
+        self.session.commit()
+        self.session.refresh(user)
+        return user
+    
     def get_by_google_sub(self, google_sub: str) -> Optional[User]:
         statement = select(User).where(User.google_sub == google_sub)
         result = self.session.exec(statement).first()

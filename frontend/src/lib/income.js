@@ -1,30 +1,37 @@
 import api from "./api";
 
-export const getIncomes = () =>
-    api.get(`/income/${id}`).then(res => res.data);
+export async function getIncomes() {
+  const response = await api.get("/income/");
+  return response.data;
+}
 
-export const getIncomesByMonth = (month) =>
-  api.get(`/income/month/${month}`).then((res) => res.data);
+export async function getIncomesByMonth(month) {
+  const response = await api.get(`/income/month/${month}`);
+  return response.data;
+}
 
-export const listByTimePeriod = (startDate, endDate) =>
-    api.get(`/income/period?start_date=${startDate}&end_date=${endDate}`).then(res => res.data);
+export async function listByTimePeriod(startDate, endDate) {
+  const response = await api.get(`/income/period?start_date=${startDate}&end_date=${endDate}`);
+  return response.data;
+}
 
-export const createIncome = (data) =>
-    api.post("/income/", data);
+export async function createIncome(data) {
+  const response = await api.post("/income/", data);
+  return response.data;
+}
 
-export const updateIncome = (id, data) =>
-    api.put(`/income/${id}`, data);
+export async function updateIncome(id, data) {
+  const response = await api.put(`/income/${id}`, data);
+  return response.data;
+}
 
-export const updateIncomesByMonth = (month, data) =>
-    api.put(`/income/${month}`, data);
+export async function updateIncomesByMonth(month, data) {
+  const response = await api.put(`/income/${month}`, data);
+  return response.data;
+}
 
-export const deleteIncome = (id) =>
-    api.delete(`/income/${id}`);
-
-
-
-
-
-
-
+export async function deleteIncome(id) {
+  const response = await api.delete(`/income/${id}`);
+  return response.data;
+}
 

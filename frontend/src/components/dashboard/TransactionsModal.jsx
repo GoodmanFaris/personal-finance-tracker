@@ -78,11 +78,11 @@ export default function TransactionsModal({ d, activeCategory, onClose }) {
             <div className="sm:col-span-2">
               <label className="block text-xs text-gray-600 mb-1">Note</label>
               <input
-                value={d.transactionDraft?.note ?? ""}
+                value={d.transactionDraft?.description ?? ""}
                 onChange={(e) =>
                   d.setTransactionDraft((prev) => ({
                     ...prev,
-                    note: e.target.value,
+                    description: e.target.value,
                   }))
                 }
                 className="w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
@@ -143,10 +143,10 @@ export default function TransactionsModal({ d, activeCategory, onClose }) {
                       <span className="font-semibold">{t.amount}</span>{" "}
                       <span className="text-gray-500">• {t.date}</span>
                     </div>
-                    {t.note ? (
-                      <div className="text-sm text-gray-600 mt-1">{t.note}</div>
+                    {t.description ? (
+                      <div className="text-sm text-gray-600 mt-1">{t.description}</div>
                     ) : (
-                      <div className="text-sm text-gray-400 mt-1">No note</div>
+                      <div className="text-sm text-gray-400 mt-1">No description</div>
                     )}
                   </div>
 

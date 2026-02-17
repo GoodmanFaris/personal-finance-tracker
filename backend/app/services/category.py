@@ -44,6 +44,10 @@ class CategoryService:
     def list_categories(self, *, user_id: int) -> list[CategoryRead]:
         return self.repository.list(user_id=user_id)
     
+    def total_active_categories(self, *, user_id: int) -> int:
+        categories = self.repository.list(user_id=user_id)
+        return len(categories)
+    
     def list_all_categories_including_inactive(self, *, user_id: int) -> list[CategoryRead]:
         return self.repository.list_all(user_id=user_id)
 
@@ -121,7 +125,7 @@ class CategoryService:
         current_categories = self.list_categories(user_id=user_id)
         current_date = date.today()
         if(current_date.day == 2):
-            Already_reset = 1;
+            Already_reset = 1
         elif(current_date.day != 1):
             return current_categories
         elif(Already_reset == 2):

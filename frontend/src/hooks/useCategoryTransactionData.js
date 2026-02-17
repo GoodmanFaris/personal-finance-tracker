@@ -31,7 +31,7 @@ export default function useCategoryTransactionData({ onBalanceChanged } = {}) {
   const [transactionDraft, setTransactionDraft] = useState({
     category_id: null,
     amount: "",
-    date: "", // npr. "2026-02-11"
+    date: "", 
     note: "",
   });
 
@@ -140,7 +140,7 @@ export default function useCategoryTransactionData({ onBalanceChanged } = {}) {
 
   //transactions
   const openCategoryForTransaction = (categoryId) => {
-    const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    const today = new Date().toISOString().slice(0, 10); 
     setTransactionDraft({
       category_id: categoryId,
       amount: "",
