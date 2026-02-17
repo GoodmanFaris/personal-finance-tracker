@@ -1,9 +1,21 @@
 "use client";
 
 import useProfileData from "../../hooks/useProfileData";
+import EditProfileModal from "../profile/EditProfileModal"; // prilagodi putanju
 
 export default function ProfileGeneralInfoCard() {
-  const { profileData, loading, openEdit } = useProfileData();
+  const {
+    profileData,
+    loading,
+    openEdit,
+    isEditOpen,
+    editValues,
+    setEditField,
+    saveEdit,
+    closeEdit,
+    updating,
+    error,
+  } = useProfileData();
 
   if (loading) {
     return (
@@ -73,6 +85,17 @@ export default function ProfileGeneralInfoCard() {
           Update Profile
         </button>
       </div>
+
+      {/* ✅ Modal */}
+      <EditProfileModal
+        open={isEditOpen}
+        onClose={closeEdit}
+        values={editValues}
+        onChange={setEditField}
+        onSave={saveEdit}
+        saving={updating}
+        error={error}
+      />
     </div>
   );
 }

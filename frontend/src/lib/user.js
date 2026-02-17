@@ -6,6 +6,6 @@ export async function fetchMe() {
 }
 
 export async function updateUser(UserUpdateData) {
-  const res = await api.put("/auth/me", UserUpdateData);
+  const res = await api.put("/user/me", UserUpdateData);
   return res.data;
 }
