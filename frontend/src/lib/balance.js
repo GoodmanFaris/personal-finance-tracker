@@ -1,17 +1,31 @@
 import api from "./api";
 
-export const getBalance = () => api.get("/balance/").then((res) => res.data);
+export async function getBalance() {
+  const response = await api.get("/balance/");
+  return response.data;
+}
 
-export const getBalanceByMonth = (month) =>
-  api.get(`/balance/month/${month}/`).then((res) => res.data);
+export async function getBalanceByMonth(month) {
+  const response = await api.get(`/balance/month/${month}/`);
+  return response.data;
+}
 
-export const createBalance = (balanceData) =>
-  api.post("/balance/", balanceData).then((res) => res.data);
+export async function createBalance(balanceData) {
+  const response = await api.post("/balance/", balanceData);
+  return response.data;
+}
 
-export const listAllBalances = () => api.get("/balance/all/").then((res) => res.data);
+export async function listAllBalances() {
+  const response = await api.get("/balance/all/");
+  return response.data;
+}
 
-export const updateBalance = (balanceId, balanceData) =>
-  api.put(`/balance/${balanceId}/`, balanceData).then((res) => res.data);
+export async function updateBalance(balanceId, balanceData) {
+  const response = await api.put(`/balance/${balanceId}/`, balanceData);
+  return response.data;
+}
 
-export const deleteBalance = (balanceId) =>
-  api.delete(`/balance/${balanceId}/`).then((res) => res.data);
+export async function deleteBalance(balanceId) {
+  const response = await api.delete(`/balance/${balanceId}/`);
+  return response.data;
+}

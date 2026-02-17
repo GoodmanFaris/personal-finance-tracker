@@ -1,11 +1,24 @@
 import api from "./api";
 
-export const getExpensesByCategory = async (startDate, endDate) => {
-    api.get(`/summary/expenses-by-category?start_date=${startDate}&end_date=${endDate}`)
-        .then(res => res.data);
+export async function getExpensesByCategory(startDate, endDate) {
+    const response = await api.get(`/summary/get_expenses_by_category?start_date=${startDate}&end_date=${endDate}`);
+    return response.data;
 }
 
-export const getTotalExpenses = async (startDate, endDate) => {
-    api.get(`/summary/total-expenses?start_date=${startDate}&end_date=${endDate}`)
-        .then(res => res.data);
+export async function getTotalExpenses(startDate, endDate) {
+    const response = await api.get(`/summary/get_total_expenses?start_date=${startDate}&end_date=${endDate}`);
+    return response.data;
 }
+
+export async function getTotalTransactions(startDate, endDate) {
+    const response = await api.get(`/summary/get_total_transactions?start_date=${startDate}&end_date=${endDate}`);
+    return response.data;
+}
+
+export async function getTotalIncome(startDate, endDate) {
+    const response = await api.get(`/summary/get_total_income?start_date=${startDate}&end_date=${endDate}`);
+    return response.data;
+}
+
+
+

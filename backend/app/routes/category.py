@@ -31,6 +31,14 @@ def get_category(
         raise HTTPException(status_code=404, detail="Category not found")
     return category
 
+@router.get("/number/total_active", response_model=int)
+def get_total_active_categories(
+    session: Session = Depends(get_session),
+    current_user: UserPublic = Depends(get_current_user)
+):
+    service = CategoryService(session)
+    return service.total_active_categories(user_id=current_user.id)
+
 @router.put("/{category_id}", response_model=CategoryRead)
 def update_category(
     category_id: int,

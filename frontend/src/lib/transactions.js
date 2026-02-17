@@ -1,22 +1,34 @@
 import api from "./api";
 
-export const getTransaction = (id) =>
-  api.get(`/transaction/${id}`).then(res => res.data);
+export async function getTransaction(id) {
+  const response = await api.get(`/transaction/${id}`);
+  return response.data;
+}
 
-export const listTransactions = () =>
-  api.get("/transaction/list/").then(res => res.data);
+export async function listTransactions() {
+  const response = await api.get("/transaction/list/");
+  return response.data;
+}
 
-export const listTransactionsByCategory = (categoryId) =>
-  api.get(`/transaction/list-by-category/${categoryId}`).then(res => res.data);
+export async function listTransactionsByCategory(categoryId) {
+  const response = await api.get(`/transaction/list-by-category/${categoryId}`);
+  return response.data;
+}
 
-export const createTransaction = (data) =>
-  api.post("/transaction/", data);
+export async function createTransaction(data) {
+  const response = await api.post("/transaction/", data);
+  return response.data;
+}
 
-export const updateTransaction = (id, data) =>
-  api.put(`/transaction/${id}`, data);
+export async function updateTransaction(id, data) {
+  const response = await api.put(`/transaction/${id}`, data);
+  return response.data;
+}
 
-export const deleteTransaction = (id) =>
-  api.delete(`/transaction/${id}`);
+export async function deleteTransaction(id) {
+  const response = await api.delete(`/transaction/${id}`);
+  return response.data;
+}
 
 
 

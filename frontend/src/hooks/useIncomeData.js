@@ -63,7 +63,6 @@ export default function useIncomeData(monthKeyProp) {
       const balanceData = await getBalance();
       setBalance(balanceData?.amount ?? 0);
     } catch (err) {
-      // Ignore balance loading errors for now
     }
   };
 
