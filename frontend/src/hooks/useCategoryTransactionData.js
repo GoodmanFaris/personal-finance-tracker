@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { listCategoriesActive, createCategory, deleteCategory, updateCategory } from "../lib/categories";
 import { listTransactionsByCategory, deleteTransaction, createTransaction as createTransactionApi } from "../lib/transactions";
+import { create } from "domain";
 
 export default function useCategoryTransactionData({ onBalanceChanged } = {}) {
   const [categories, setCategories] = useState([]);
@@ -219,6 +220,55 @@ export default function useCategoryTransactionData({ onBalanceChanged } = {}) {
     }
   };
 
+  const createTransactionWithPayload = async (payload) => {
+    setTransactionError("");
+    setTransactionMsg("");
+    setSavingTransaction(true);
+
+    const categoryId = Number(payload.category_id);
+    const amountNum = Number(payload.amount);
+
+    if (!Number.isFinite(categoryId) || categoryId <= 0) {
+      setTransactionError("Invalid category.");
+      setSavingTransaction(false);
+      return false;
+    }
+    if (!Number.isFinite(amountNum)) {
+      setTransactionError("Amount must be a number.");
+      setSavingTransaction(false);
+      return false;
+    }
+    if (!payload.date) {
+      setTransactionError("Date is required.");
+      setSavingTransaction(false);
+      return false;
+    }
+
+    try {
+      await createTransactionApi({
+        category_id: categoryId,
+        amount: amountNum,
+        type: payload.type || "expense",
+        date: payload.date,
+        description: (payload.description || "").trim(),
+      });
+
+      setTransactionMsg("Transaction saved.");
+      await onBalanceChanged?.();
+      await loadTransactionsByCategory(categoryId);
+      await loadCategories();
+      return true;
+    } catch (err) {
+      setTransactionError(
+        err?.response?.data?.detail || "Failed to save transaction.",
+      );
+      return false;
+    } finally {
+      setSavingTransaction(false);
+    }
+  };
+
+
   const deleteTransactionById = async (transactionId, categoryId) => {
     setTransactionToDelete(transactionId);
     setTransactionError("");
@@ -262,6 +312,7 @@ export default function useCategoryTransactionData({ onBalanceChanged } = {}) {
     openCategoryForTransaction,
     addTransactionModalOpen,
     closeAddTransactionModal,
+    createTransactionWithPayload,
     createTransaction,
     deleteTransactionById,
     setCategoryDraft,

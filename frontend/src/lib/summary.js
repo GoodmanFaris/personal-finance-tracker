@@ -20,5 +20,7 @@ export async function getTotalIncome(startDate, endDate) {
     return response.data;
 }
 
-
-
+export async function getSummaryBundle(startMonth, endMonth, topN = 10) {
+  const response = await api.get(`/summary/bundle?start_month=${startMonth}&end_month=${endMonth}&top_n=${topN}`);
+  return response.data;
+}

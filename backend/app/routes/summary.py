@@ -10,60 +10,19 @@ from app.schemas.user import UserPublic
 
 router = APIRouter(prefix="/summary", tags=["summary"])
 
-@router.get("/get_expenses_by_category", response_model=List[ExpensesByCategory])
-def get_expenses_by_category(
-    start_date: str,
-    end_date: str,
+@router.get("/bundle")
+def summary_bundle(
+    start_month: str,
+    end_month: str,
+    top_n: int = 10,
     session: Session = Depends(get_session),
-    current_user: UserPublic = Depends(get_current_user)
+    current_user: UserPublic = Depends(get_current_user),
 ):
     service = SummaryService(session)
-    return service.get_expenses_by_category(
+    return service.get_summary_bundle(
         user_id=current_user.id,
-        start_date=start_date,
-        end_date=end_date
+        start_month=start_month,
+        end_month=end_month,
+        top_n=top_n,
     )
-
-@router.get("/get_total_transactions", response_model=int)
-def get_total_transactions(
-    start_date: str,
-    end_date: str,
-    session: Session = Depends(get_session),
-    current_user: UserPublic = Depends(get_current_user)
-):
-    service = SummaryService(session)
-    return service.get_total_transactions(
-        user_id=current_user.id,
-        start_month=start_date,
-        end_month=end_date
-    )
-
-@router.get("/get_total_expenses", response_model=float)
-def get_total_expenses(
-    start_date: str,
-    end_date: str,
-    session: Session = Depends(get_session),
-    current_user: UserPublic = Depends(get_current_user)
-):
-    service = SummaryService(session)
-    return service.get_total_expenses(
-        user_id=current_user.id,
-        start_date=start_date,
-        end_date=end_date
-    )
-
-@router.get("/get_total_income", response_model=float)
-def get_total_income(
-    start_date: str,
-    end_date: str,
-    session: Session = Depends(get_session),
-    current_user: UserPublic = Depends(get_current_user)
-):
-    service = SummaryService(session)
-    return service.get_total_income(
-        user_id=current_user.id,
-        start_date=start_date,
-        end_date=end_date
-    )
-
 

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from sqlmodel import SQLModel, Session
 from app.core.database import engine
-#CORS middleware
+
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.models.user import User
@@ -15,12 +15,6 @@ from app.routes import user
 
 
 app = FastAPI()
-
-
-
-@app.on_event("startup")
-async def startup_event():
-     SQLModel.metadata.create_all(engine)
 
 origins = [
     "http://localhost:3000",
@@ -48,5 +42,4 @@ app.include_router(income.router)
 app.include_router(balance.router)
 app.include_router(auth.router)
 app.include_router(user.router)
-
 app.include_router(summary.router)

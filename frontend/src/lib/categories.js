@@ -16,7 +16,7 @@ export async function getCategoryByName(name) {
 }
 
 export async function listCategoriesAll() {
-  const response = await api.get("/category/list/inactive/active");
+  const response = await api.get("/category/list_all/inactive/active");
   return response.data;
 }
 
