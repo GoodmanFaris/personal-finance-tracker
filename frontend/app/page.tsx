@@ -1,24 +1,36 @@
-export default function HomePage() {
-  return (
-    <main className="min-h-screen flex items-center justify-center bg-white px-6">
-      <div className="text-center max-w-2xl">
-        
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900">
-          Personal Finance Tracker
-        </h1>
+"use client";
 
-        <p className="mt-6 text-lg text-gray-600">
-          Track your income, manage expenses, and stay in control of your finances.
-        </p>
+import { useEffect, useState } from "react";
+import { fetchMe } from "../src/lib/auth";
+import LandingQuickPanel from "../src/components/landing/LandingQuickPanel";
+import PublicLanding from "../src/components/landing/PublicLanding";
 
-        <a
-          href="/register"
-          className="inline-block mt-10 rounded-lg bg-gray-900 px-6 py-3 text-white font-medium hover:bg-black transition"
-        >
-          Get Started
-        </a>
+export default function Page() {
+  const [ready, setReady] = useState(false);
+  const [isAuthed, setIsAuthed] = useState(false);
 
-      </div>
-    </main>
-  );
+  useEffect(() => {
+    (async () => {
+      const token = localStorage.getItem("access_token");
+      if (!token) {
+        setIsAuthed(false);
+        setReady(true);
+        return;
+      }
+
+      try {
+        await fetchMe(); 
+        setIsAuthed(true);
+      } catch {
+        localStorage.removeItem("access_token");
+        setIsAuthed(false);
+      } finally {
+        setReady(true);
+      }
+    })();
+  }, []);
+
+  if (!ready) return null;
+
+  return isAuthed ? <LandingQuickPanel /> : <PublicLanding />;
 }

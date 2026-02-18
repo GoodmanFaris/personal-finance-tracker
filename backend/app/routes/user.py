@@ -15,5 +15,5 @@ def update_profile(
     session: Session = Depends(get_session)
 ):
     service = UserService(session)
-    updated_user = service.update(user=current_user.id, user_in=payload)
+    updated_user = service.update(user_id=current_user.id, user_in=payload)
     return updated_user

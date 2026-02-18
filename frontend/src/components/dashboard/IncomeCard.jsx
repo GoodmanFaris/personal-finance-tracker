@@ -1,5 +1,8 @@
 "use client";
 
+import useAuthData from "../../hooks/useAuthData";
+import { getCurrencySymbol } from "../../utils/HelpersValues";
+
 export default function IncomeCard({ d }) {
   const formattedMonth =
     d.monthKey ||
@@ -7,6 +10,9 @@ export default function IncomeCard({ d }) {
       month: "long",
       year: "numeric",
     });
+
+    const { user } = useAuthData(); 
+    const symbol = getCurrencySymbol(user?.currency || "USD");
 
   return (
     <section className="w-full rounded-l overflow-hidden border border-blue-400/20 bg-gradient-to-br from-blue-800 via-blue-700 to-blue-500 text-white shadow-lg hover:shadow-xl transition-all duration-300">
@@ -24,7 +30,7 @@ export default function IncomeCard({ d }) {
               {d.loadingIncome
                 ? "Loading..."
                 : d.balance !== null
-                  ? `$${d.balance.toLocaleString()}`
+                  ? `${symbol}${d.balance.toLocaleString()}`
                   : "N/A"}
             </p>
             <p className="text-white/70 text-sm mt-1">Total Balance</p>
@@ -36,7 +42,7 @@ export default function IncomeCard({ d }) {
           <p className="text-white/80 text-xl">
             Income:{" "}
             <span className="font-semibold text-white">
-              ${d.income?.toLocaleString()}
+              {symbol}{d.income?.toLocaleString()}
             </span>
           </p>
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { fetchMe, updateUser } from "../lib/user";
-import { getTotalIncome, getTotalTransactions, getTotalExpenses } from "../lib/summary";
+import { getTotalIncome, getTotalTransactions, getTotalExpenses, getSummaryBundle } from "../lib/summary";
 import { getBalance } from "../lib/balance";
 import { getTotalCategories } from "../lib/categories";
 
@@ -42,29 +42,21 @@ export default function useProfileData() {
   const getAllData = useCallback(async () => {
     const fromMonth = profileData?.created_at?.slice(0, 7);
     const toMonth = new Date().toISOString().slice(0, 7);
-
-    const fromMonthFull = profileData?.created_at?.slice(0, 10);
-    const toMonthFull = new Date().toISOString().slice(0, 10);
-
     if (!fromMonth) return;
 
     setError("");
     setLoading(true);
 
-    try {
-      const totalIncomeData = await getTotalIncome(fromMonth, toMonth);
-      setTotalIncome(totalIncomeData ?? 0);
-      const totalTransactionsData = await getTotalTransactions(
-        fromMonthFull,
-        toMonthFull,
-      );
-      setTotalTransactions(totalTransactionsData ?? 0);
+    
 
+    try {
       const balance = await getBalance();
       setCurrentBalance(balance?.amount ?? 0);
 
-      const totalExpensesData = await getTotalExpenses(fromMonth, toMonth);
-      setTotalExpenses(totalExpensesData ?? 0);
+      const summaryBundle = await getSummaryBundle(fromMonth, toMonth, 50);
+      setTotalExpenses(summaryBundle?.totals?.expenses ?? 0);
+      setTotalIncome(summaryBundle?.totals?.income ?? 0);
+      setTotalTransactions(summaryBundle?.totals?.transactions ?? 0);
       const totalCategoriesData = await getTotalCategories();
       setTotalCategories(totalCategoriesData ?? 0);
 
@@ -73,18 +65,13 @@ export default function useProfileData() {
       const diffDays = Math.ceil(
         Math.abs(now - createdAt) / (1000 * 60 * 60 * 24),
       );
-
+      console.log(summaryBundle);
       if (diffDays < 30) setUsingFor("less than a month");
       else if (diffDays < 365)
         setUsingFor(`${Math.floor(diffDays / 30)} month(s)`);
       else setUsingFor(`${Math.floor(diffDays / 365)} year(s)`);
     } catch (err) {
-      console.log(
-        "PROFILE STATS ERROR:",
-        err?.response?.status,
-        err?.response?.data,
-      );
-      //setError(err?.response?.data?.detail || "Failed to load profile data");
+      setError(err?.response?.data?.detail || "Failed to load profile data");
     } finally {
       setLoading(false);
     }
