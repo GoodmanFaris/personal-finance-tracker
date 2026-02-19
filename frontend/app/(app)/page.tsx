@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { fetchMe } from "../src/lib/auth";
-import LandingQuickPanel from "../src/components/landing/LandingQuickPanel";
-import PublicLanding from "../src/components/landing/PublicLanding";
+import { fetchMe } from "../../src/lib/auth";
+import LandingQuickPanel from "../../src/components/landing/LandingQuickPanel";
+import PublicLanding from "../../src/components/landing/PublicLanding";
 
 export default function Page() {
   const [ready, setReady] = useState(false);
@@ -19,7 +19,7 @@ export default function Page() {
       }
 
       try {
-        await fetchMe(); 
+        await fetchMe();
         setIsAuthed(true);
       } catch {
         localStorage.removeItem("access_token");

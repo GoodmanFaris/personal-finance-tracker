@@ -24,3 +24,24 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+:root {
+  --color-primary: 24 122 214;
+  --color-secondary: 32 201 80;
+  --color-accent: 47 237 145;
+  --color-background: 230 238 242;
+  --color-shadow: 144 148 150;
+  --color-text-white: 0 0 0;
+  --color-text-dark: 17 28 33;
+}
+
+.dark {
+  --color-primary: 6 65 120;
+  --color-secondary: 4 145 44;
+  --color-accent: 14 161 90;
+  --color-background: 4 36 43;
+  --color-shadow: 144 148 150;
+  --color-text-white: 0 0 0;
+  --color-text-dark: 17 28 33;
+}
+

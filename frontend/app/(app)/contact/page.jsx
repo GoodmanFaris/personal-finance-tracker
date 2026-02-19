@@ -1,6 +1,6 @@
 
-import ProtectedRoute from "../../src/components/auth/ProtectedRoute";
-import ContactForm from "../../src/components/contact/ContactForm";
+import ProtectedRoute from "../../../src/components/auth/ProtectedRoute";
+import ContactForm from "../../../src/components/contact/ContactForm";
 
 export default function ContactPage() {
   return (

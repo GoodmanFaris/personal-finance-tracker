@@ -1,17 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import useDashboardData from "../../src/hooks/useDashboardData";
+import useDashboardData from "../../../src/hooks/useDashboardData";
 
-import IncomeCard from "../../src/components/dashboard/IncomeCard";
-import IncomeModal from "../../src/components/dashboard/IncomeModal";
-import CategoriesSection from "../../src/components/dashboard/CategoriesSection";
-import CategoryModal from "../../src/components/dashboard/CategoryModal";
-import useAuthData from "../../src/hooks/useAuthData";
+import IncomeCard from "../../../src/components/dashboard/IncomeCard";
+import IncomeModal from "../../../src/components/dashboard/IncomeModal";
+import CategoriesSection from "../../../src/components/dashboard/CategoriesSection";
+import CategoryModal from "../../../src/components/dashboard/CategoryModal";
+import useAuthData from "../../../src/hooks/useAuthData";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import TransactionsModal from "../../src/components/dashboard/TransactionsModal";
-import ProtectedRoute from "../../src/components/auth/ProtectedRoute"
+import TransactionsModal from "../../../src/components/dashboard/TransactionsModal";
+import ProtectedRoute from "../../../src/components/auth/ProtectedRoute"
 
 export default function DashboardPage() {
   const d = useDashboardData();

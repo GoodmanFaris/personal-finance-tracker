@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "src/lib/api.js", "app/dashboard/page.jsx", "app/dashboard/layout.jsx", "app/layout.jsx"  ],
+, "src/lib/api.js", "app/(app)/dashboard/page.jsx", "app/(app)/dashboard/laapp/(app)/layout.jsxp/layout.jsx"  ],
   "exclude": ["node_modules"]
 }

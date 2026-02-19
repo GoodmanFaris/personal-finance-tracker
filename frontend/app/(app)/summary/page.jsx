@@ -1,15 +1,15 @@
 "use client";
 
-import useSummaryData from "../../src/hooks/useSummaryData";
-import SummaryPeriodPicker from "../../src/components/summary/SummaryPeriodPicker";
-import MonthlyIncomeExpenseChart from "../../src/components/summary/MonthlyIncomeExpenseChart";
-import { getCurrencySymbol } from "../../src/utils/HelpersValues"; 
-import ProtectedRoute from "../../src/components/auth/ProtectedRoute";
-import SummaryDonuts from "../../src/components/summary/SummaryDonuts";
+import useSummaryData from "../../../src/hooks/useSummaryData";
+import SummaryPeriodPicker from "../../../src/components/summary/SummaryPeriodPicker";
+import MonthlyIncomeExpenseChart from "../../../src/components/summary/MonthlyIncomeExpenseChart";
+import { getCurrencySymbol } from "../../../src/utils/HelpersValues"; 
+import ProtectedRoute from "../../../src/components/auth/ProtectedRoute";
+import SummaryDonuts from "../../../src/components/summary/SummaryDonuts";
 
-import useCategoryHistoryData from "../../src/hooks/useCategoryHistoryData";
-import CategoryHistoryPanel from "../../src/components/summary/CategoryHistoryPanel";
-import CategoryTransactionsModal from "../../src/components/summary/CategoryTransactionsModal";
+import useCategoryHistoryData from "../../../src/hooks/useCategoryHistoryData";
+import CategoryHistoryPanel from "../../../src/components/summary/CategoryHistoryPanel";
+import CategoryTransactionsModal from "../../../src/components/summary/CategoryTransactionsModal";
 
 export default function SummaryPage() {
   const { startMonth, endMonth, setRange, data, loading, error } =
