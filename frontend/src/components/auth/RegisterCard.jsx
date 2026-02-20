@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import useAuthData from "../../hooks/useAuthData"; 
+import useAuthData from "../../hooks/useAuthData";
+
 export default function RegisterCard({
   title = "Create account",
   subtitle = "Start tracking your finances",
@@ -21,27 +22,27 @@ export default function RegisterCard({
     const ok = await register(name, email, password);
 
     setSubmitting(false);
-    if (ok) {
-      window.location.href = onSuccessRedirect;
-    }
+    if (ok) window.location.href = onSuccessRedirect;
   };
 
   return (
-    <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+    <div className="w-full max-w-md overflow-hidden rounded-3xl border border-white/15 bg-white/85 p-6 shadow-[0_28px_90px_rgba(0,0,0,0.25)] backdrop-blur-xl">
       <div className="mb-6">
-        <h1 className="text-xl font-semibold text-gray-900">{title}</h1>
-        <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
+        <h1 className="text-2xl font-extrabold tracking-tight text-gray-900">
+          {title}
+        </h1>
+        <p className="mt-1 text-sm text-gray-600">{subtitle}</p>
       </div>
 
       {error ? (
-        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+        <div className="mb-4 rounded-2xl border border-red-200 bg-red-50 p-3 text-sm text-red-800">
           {error}
         </div>
       ) : null}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">
+          <label className="mb-1 block text-sm font-semibold text-black/70">
             Name
           </label>
           <input
@@ -50,13 +51,13 @@ export default function RegisterCard({
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-gray-900"
+            className="w-full rounded-2xl border border-black/10 bg-white/70 px-4 py-3 text-sm text-gray-900 outline-none placeholder:text-black/35 focus:border-black/20 focus:bg-white transition"
             placeholder="Your name"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">
+          <label className="mb-1 block text-sm font-semibold text-black/70">
             Email
           </label>
           <input
@@ -65,13 +66,13 @@ export default function RegisterCard({
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-gray-900"
+            className="w-full rounded-2xl border border-black/10 bg-white/70 px-4 py-3 text-sm text-gray-900 outline-none placeholder:text-black/35 focus:border-black/20 focus:bg-white transition"
             placeholder="you@example.com"
           />
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">
+          <label className="mb-1 block text-sm font-semibold text-black/70">
             Password
           </label>
           <input
@@ -80,10 +81,10 @@ export default function RegisterCard({
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm outline-none focus:border-gray-900"
+            className="w-full rounded-2xl border border-black/10 bg-white/70 px-4 py-3 text-sm text-gray-900 outline-none placeholder:text-black/35 focus:border-black/20 focus:bg-white transition"
             placeholder="Minimum 8 characters"
           />
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-black/45">
             Use at least 8 characters.
           </p>
         </div>
@@ -91,29 +92,34 @@ export default function RegisterCard({
         <button
           type="submit"
           disabled={submitting}
-          className="w-full rounded-lg bg-gray-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-black disabled:opacity-60"
+          className="w-full rounded-2xl px-4 py-3 text-sm font-extrabold text-white shadow-md transition disabled:opacity-60"
+          style={{
+            background:
+              "rgba(var(--color-secondary))",
+            boxShadow: "0 18px 45px rgba(0,0,0,0.18)",
+          }}
         >
           {submitting ? "Creating account..." : "Create account"}
         </button>
       </form>
 
       <div className="my-5 flex items-center gap-3">
-        <div className="h-px flex-1 bg-gray-200" />
-        <span className="text-xs text-gray-500">OR</span>
-        <div className="h-px flex-1 bg-gray-200" />
+        <div className="h-px flex-1 bg-black/10" />
+        <span className="text-xs text-black/45">OR</span>
+        <div className="h-px flex-1 bg-black/10" />
       </div>
 
       <button
         type="button"
         onClick={() => alert("Google signup not wired yet. Coming soon.")}
-        className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-50"
+        className="w-full rounded-2xl border border-black/10 bg-white/70 px-4 py-3 text-sm font-extrabold text-gray-900 hover:bg-white transition"
       >
         Sign up with Google
       </button>
 
-      <p className="mt-6 text-center text-sm text-gray-600">
+      <p className="mt-6 text-center text-sm text-gray-700">
         Already have an account?{" "}
-        <a href="/login" className="font-medium text-gray-900 underline">
+        <a href="/login" className="font-semibold underline">
           Sign in
         </a>
       </p>

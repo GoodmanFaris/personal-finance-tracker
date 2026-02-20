@@ -15,164 +15,224 @@ export default function TransactionsModal({ d, activeCategory, onClose }) {
 
   const categoryName = activeCategory?.name || "Category";
 
+  const handleClose = () => {
+    d.closeAddTransactionModal?.();
+    onClose?.();
+  };
+
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl rounded-2xl bg-white shadow-lg border overflow-hidden">
-        {/* Header */}
-        <div className="px-5 py-4 flex items-start justify-between border-b bg-blue-50">
-          <div>
-            <h3 className="text-lg font-semibold text-gray-900">
-              Transactions
-            </h3>
-            <p className="text-sm text-gray-700">
-              Category: <span className="font-medium">{categoryName}</span>
-            </p>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Backdrop */}
+      <div
+        className="absolute inset-0 bg-black/55 backdrop-blur-sm"
+        onClick={handleClose}
+      />
+
+      {/* Window */}
+      <div className="relative w-full max-w-2xl overflow-hidden rounded-3xl border border-white/15 bg-white/90 shadow-[0_28px_90px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+        {/* Header / Titlebar (secondary) */}
+        <div
+          className="relative px-5 py-4 text-white"
+          style={{ background: "rgb(var(--color-secondary))" }}
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold text-white/80">
+                Transactions
+              </p>
+              <h3 className="text-lg font-extrabold tracking-tight">
+                {categoryName}
+              </h3>
+              <p className="mt-1 text-sm text-white/85">
+                Add a transaction and manage the list below.
+              </p>
+            </div>
+
+            {/* Window controls */}
+            <div className="flex items-center gap-2">
+              <span className="h-3 w-3 rounded-full bg-white/50" />
+              <span className="h-3 w-3 rounded-full bg-white/35" />
+              <button
+                onClick={handleClose}
+                className="ml-1 grid h-9 w-9 place-items-center rounded-xl bg-white/15 hover:bg-white/25 transition"
+                aria-label="Close"
+                type="button"
+              >
+                <span className="text-lg leading-none">✕</span>
+              </button>
+            </div>
           </div>
 
-          <button
-            onClick={() => {
-              d.closeAddTransactionModal?.();
-              onClose?.();
-            }}
-            className="text-gray-500 hover:text-gray-900"
-            aria-label="Close"
-          >
-            ✕
-          </button>
+          {/* subtle header shine */}
+          <div className="pointer-events-none absolute left-0 top-0 h-24 w-full bg-gradient-to-b from-white/15 to-transparent" />
         </div>
 
-        {/* Add form */}
-        <div className="px-5 py-4 space-y-3">
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
-            <div className="sm:col-span-1">
-              <label className="block text-xs text-gray-600 mb-1">Amount</label>
-              <input
-                type="number"
-                value={d.transactionDraft?.amount ?? ""}
-                onChange={(e) =>
-                  d.setTransactionDraft((prev) => ({
-                    ...prev,
-                    amount: e.target.value,
-                  }))
-                }
-                className="w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="25"
-              />
+        {/* Body */}
+        <div className="px-5 py-5 space-y-4">
+          {/* Add form */}
+          <div className="space-y-3">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-4">
+              {/* Amount */}
+              <div className="sm:col-span-1">
+                <label className="mb-1 block text-xs font-semibold text-black/60">
+                  Amount
+                </label>
+                <div className="rounded-2xl border border-black/10 bg-white/70 focus-within:border-black/20 focus-within:bg-white transition">
+                  <input
+                    type="number"
+                    value={d.transactionDraft?.amount ?? ""}
+                    onChange={(e) =>
+                      d.setTransactionDraft((prev) => ({
+                        ...prev,
+                        amount: e.target.value,
+                      }))
+                    }
+                    className="w-full bg-transparent px-4 py-3 text-sm text-gray-900 outline-none placeholder:text-black/35"
+                    placeholder="25"
+                  />
+                </div>
+              </div>
+
+              {/* Date */}
+              <div className="sm:col-span-1">
+                <label className="mb-1 block text-xs font-semibold text-black/60">
+                  Date
+                </label>
+                <div className="rounded-2xl border border-black/10 bg-white/70 focus-within:border-black/20 focus-within:bg-white transition">
+                  <input
+                    type="date"
+                    value={d.transactionDraft?.date ?? ""}
+                    onChange={(e) =>
+                      d.setTransactionDraft((prev) => ({
+                        ...prev,
+                        date: e.target.value,
+                      }))
+                    }
+                    className="w-full bg-transparent px-4 py-3 text-sm text-gray-900 outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Note */}
+              <div className="sm:col-span-2">
+                <label className="mb-1 block text-xs font-semibold text-black/60">
+                  Note
+                </label>
+                <div className="rounded-2xl border border-black/10 bg-white/70 focus-within:border-black/20 focus-within:bg-white transition">
+                  <input
+                    value={d.transactionDraft?.description ?? ""}
+                    onChange={(e) =>
+                      d.setTransactionDraft((prev) => ({
+                        ...prev,
+                        description: e.target.value,
+                      }))
+                    }
+                    className="w-full bg-transparent px-4 py-3 text-sm text-gray-900 outline-none placeholder:text-black/35"
+                    placeholder="optional..."
+                  />
+                </div>
+              </div>
             </div>
 
-            <div className="sm:col-span-1">
-              <label className="block text-xs text-gray-600 mb-1">Date</label>
-              <input
-                type="date"
-                value={d.transactionDraft?.date ?? ""}
-                onChange={(e) =>
-                  d.setTransactionDraft((prev) => ({
-                    ...prev,
-                    date: e.target.value,
-                  }))
-                }
-                className="w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-              />
+            <div className="flex justify-end">
+              <button
+                onClick={d.createTransaction}
+                disabled={d.savingTransaction}
+                className="rounded-2xl px-4 py-2.5 text-sm font-extrabold text-white shadow-md transition disabled:cursor-not-allowed disabled:opacity-60"
+                style={{
+                  background:
+                    "rgba(var(--color-primary)",
+                  boxShadow: "0 18px 45px rgba(0,0,0,0.12)",
+                }}
+                type="button"
+              >
+                {d.savingTransaction ? "Saving..." : "Add transaction"}
+              </button>
             </div>
 
-            <div className="sm:col-span-2">
-              <label className="block text-xs text-gray-600 mb-1">Note</label>
-              <input
-                value={d.transactionDraft?.description ?? ""}
-                onChange={(e) =>
-                  d.setTransactionDraft((prev) => ({
-                    ...prev,
-                    description: e.target.value,
-                  }))
-                }
-                className="w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="optional..."
-              />
-            </div>
-          </div>
+            {d.transactionMsg ? (
+              <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
+                {d.transactionMsg}
+              </div>
+            ) : null}
 
-          <div className="flex justify-end">
-            <button
-              onClick={d.createTransaction}
-              disabled={d.savingTransaction}
-              className="rounded-xl bg-blue-600 text-white px-4 py-2 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed transition"
-            >
-              {d.savingTransaction ? "Saving..." : "Add transaction"}
-            </button>
-          </div>
-
-          {d.transactionMsg ? (
-            <div className="rounded-xl bg-green-50 border border-green-200 px-4 py-3 text-sm text-green-800">
-              {d.transactionMsg}
-            </div>
-          ) : null}
-
-          {d.transactionError ? (
-            <div className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-800">
-              {d.transactionError}
-            </div>
-          ) : null}
-        </div>
-
-        {/* List */}
-        <div className="px-5 pb-5">
-          <div className="flex items-center justify-between mb-2">
-            <p className="text-sm font-medium text-gray-900">List</p>
-            {d.loadingTransactions ? (
-              <p className="text-xs text-gray-500">Loading...</p>
+            {d.transactionError ? (
+              <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900">
+                {d.transactionError}
+              </div>
             ) : null}
           </div>
 
-          {d.loadingTransactions ? (
-            <div className="rounded-xl border p-4 text-gray-600 text-sm">
-              Loading transactions...
+          {/* List */}
+          <div>
+            <div className="mb-2 flex items-center justify-between">
+              <p className="text-sm font-extrabold tracking-tight text-gray-900">
+                List
+              </p>
+              {d.loadingTransactions ? (
+                <p className="text-xs text-gray-500">Loading...</p>
+              ) : null}
             </div>
-          ) : txList.length === 0 ? (
-            <div className="rounded-xl border border-dashed p-5 text-gray-600 text-sm">
-              No transactions yet for this category.
-            </div>
-          ) : (
-            <div className="space-y-2">
-              {txList.map((t) => (
-                <div
-                  key={t.id}
-                  className="rounded-xl border p-3 flex items-start justify-between gap-3"
-                >
-                  <div>
-                    <div className="text-sm text-gray-900">
-                      <span className="font-semibold">{t.amount}</span>{" "}
-                      <span className="text-gray-500">• {t.date}</span>
-                    </div>
-                    {t.description ? (
-                      <div className="text-sm text-gray-600 mt-1">{t.description}</div>
-                    ) : (
-                      <div className="text-sm text-gray-400 mt-1">No description</div>
-                    )}
-                  </div>
 
-                  <button
-                    onClick={() =>
-                      d.deleteTransactionById(t.id, activeCategory?.id)
-                    }
-                    disabled={d.transactionToDelete === t.id}
-                    className="rounded-lg border px-3 py-1 text-sm text-red-700 hover:bg-red-50 disabled:opacity-60 disabled:cursor-not-allowed transition"
+            {d.loadingTransactions ? (
+              <div className="rounded-2xl border border-black/10 bg-white/70 p-4 text-sm text-gray-700">
+                Loading transactions...
+              </div>
+            ) : txList.length === 0 ? (
+              <div className="rounded-2xl border border-dashed border-black/15 bg-white/60 p-5 text-sm text-gray-600">
+                No transactions yet for this category.
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {txList.map((t) => (
+                  <div
+                    key={t.id}
+                    className="group rounded-2xl border border-black/10 bg-white/70 p-3 transition hover:bg-white"
                   >
-                    {d.transactionToDelete === t.id ? "Deleting..." : "Delete"}
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="text-sm text-gray-900">
+                          <span className="font-extrabold">{t.amount}</span>{" "}
+                          <span className="text-gray-500">• {t.date}</span>
+                        </div>
+
+                        {t.description ? (
+                          <div className="mt-1 text-sm text-gray-700">
+                            {t.description}
+                          </div>
+                        ) : (
+                          <div className="mt-1 text-sm text-gray-400">
+                            No description
+                          </div>
+                        )}
+                      </div>
+
+                      <button
+                        onClick={() =>
+                          d.deleteTransactionById(t.id, activeCategory?.id)
+                        }
+                        disabled={d.transactionToDelete === t.id}
+                        className="rounded-xl border border-red-200 bg-white px-3 py-1.5 text-sm font-extrabold text-red-700 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
+                        type="button"
+                      >
+                        {d.transactionToDelete === t.id
+                          ? "Deleting..."
+                          : "Delete"}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Footer */}
-        <div className="px-5 py-4 border-t flex justify-end">
+        <div className="flex justify-end border-t border-black/10 bg-white/70 px-5 py-4">
           <button
-            onClick={() => {
-              d.closeAddTransactionModal?.();
-              onClose?.();
-            }}
-            className="rounded-xl border px-4 py-2 hover:bg-gray-50 transition"
+            onClick={handleClose}
+            className="rounded-2xl border border-black/10 bg-white px-4 py-2 text-sm font-semibold text-black/70 hover:bg-black/5 transition"
+            type="button"
           >
             Close
           </button>
