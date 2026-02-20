@@ -72,12 +72,12 @@ export default function Navbar() {
             >
               <Box
                 sx={{
-                  width: 72,
-                  height: 72,
+                  width: 48,
+                  height: 48,
                   display: "grid",
                   placeItems: "center",
-                  position: "relative", // 🔥 OVO FALI
-                  overflow: "hidden", // dobro je dodati
+                  position: "relative", 
+                  overflow: "hidden", 
                   transition: "transform 180ms ease",
                   "&:hover": { transform: "rotate(-3deg) scale(1.02)" },
                 }}

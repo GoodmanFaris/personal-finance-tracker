@@ -20,8 +20,8 @@ function CustomTooltip({ active, payload, currencySymbol }) {
   const value = p?.value ?? 0;
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-3 shadow-sm">
-      <p className="text-sm font-medium text-gray-900">{name}</p>
+    <div className="rounded-xl border border-black/10 bg-white/95 p-3 shadow-[0_18px_60px_rgba(0,0,0,0.18)] backdrop-blur">
+      <p className="text-sm font-extrabold text-gray-900">{name}</p>
       <p className="mt-1 text-sm text-gray-700">
         {currencySymbol}
         {formatNumber(value)}
@@ -32,17 +32,55 @@ function CustomTooltip({ active, payload, currencySymbol }) {
 
 function EmptyCard({ title, subtitle }) {
   return (
-    <div className="w-full rounded-2xl bg-white border border-gray-200 p-6 shadow-sm">
-      <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-      <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
-      <div className="mt-6 h-[280px] flex items-center justify-center text-sm text-gray-500">
-        No data for this period.
+    <div className="relative w-full overflow-hidden rounded-xl border border-black/10 bg-white shadow-[0_18px_60px_rgba(0,0,0,0.08)]">
+      <div
+        className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full blur-3xl opacity-20"
+        style={{ background: "rgb(var(--color-secondary))" }}
+      />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/[0.02] via-transparent to-transparent" />
+
+      <div className="relative border-b border-black/10 px-5 py-4 sm:px-6">
+        <div className="flex items-center gap-2">
+          <span
+            className="h-2 w-2 rounded-full"
+            style={{ background: "rgb(var(--color-secondary))" }}
+          />
+          <h3 className="text-lg font-extrabold tracking-tight text-gray-900">
+            {title}
+          </h3>
+        </div>
+        <p className="mt-1 text-sm text-gray-600">{subtitle}</p>
+      </div>
+
+      <div className="relative px-5 py-6 sm:px-6">
+        <div className="h-[280px] flex items-center justify-center text-sm text-gray-500">
+          No data for this period.
+        </div>
       </div>
     </div>
   );
 }
 
-function DonutCard({ title, subtitle, data, currencySymbol, centerLabel }) {
+
+const CATEGORY_COLORS = [
+  "#1F3A8A", 
+  "#0F766E", 
+  "#7C3AED", 
+  "#B45309", 
+  "#DC2626", 
+  "#4B5563", 
+  "#0891B2", 
+  "#16A34A", 
+];
+
+function DonutCard({
+  title,
+  subtitle,
+  data,
+  currencySymbol,
+  centerLabel,
+  colors, // optional array of colors for slices
+}) {
   const total = data.reduce((s, x) => s + Number(x.value || 0), 0);
 
   if (!data?.length || total <= 0) {
@@ -50,43 +88,77 @@ function DonutCard({ title, subtitle, data, currencySymbol, centerLabel }) {
   }
 
   return (
-    <div className="w-full rounded-2xl bg-white border border-gray-200 p-6 shadow-sm">
-      <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-      <p className="mt-1 text-sm text-gray-500">{subtitle}</p>
+    <div className="relative w-full overflow-hidden rounded-xl border border-black/10 bg-white shadow-[0_18px_60px_rgba(0,0,0,0.08)]">
+      <div
+        className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full blur-3xl opacity-20"
+        style={{ background: "rgb(var(--color-secondary))" }}
+      />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/[0.02] via-transparent to-transparent" />
 
-      <div className="mt-6 h-[280px] w-full relative">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={data}
-              dataKey="value"
-              nameKey="name"
-              innerRadius={70}
-              outerRadius={100}
-              paddingAngle={2}
-            >
-              {data.map((_, i) => (
-                <Cell key={i} />
-              ))}
-            </Pie>
+      {/* Header */}
+      <div className="relative border-b border-black/10 px-5 py-4 sm:px-6">
+        <div className="flex items-center gap-2">
+          <span
+            className="h-2 w-2 rounded-full"
+            style={{ background: "rgb(var(--color-secondary))" }}
+          />
+          <h3 className="text-lg font-extrabold tracking-tight text-gray-900">
+            {title}
+          </h3>
+        </div>
+        <p className="mt-1 text-sm text-gray-600">{subtitle}</p>
+      </div>
 
-            <Tooltip
-              content={<CustomTooltip currencySymbol={currencySymbol} />}
-            />
-            <Legend verticalAlign="bottom" height={36} />
-          </PieChart>
-        </ResponsiveContainer>
+      {/* Chart */}
+      <div className="relative px-2 sm:px-4 py-5">
+        <div className="h-[300px] w-full relative">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={data}
+                dataKey="value"
+                nameKey="name"
+                innerRadius={78}
+                outerRadius={112}
+                paddingAngle={2}
+                stroke="rgba(0,0,0,0.06)"
+              >
+                {data.map((_, i) => (
+                  <Cell
+                    key={i}
+                    fill={
+                      colors?.[i % colors.length] ||
+                      CATEGORY_COLORS[i % CATEGORY_COLORS.length]
+                    }
+                  />
+                ))}
+              </Pie>
 
-        {/* Center label */}
-        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-          <p className="text-xs text-gray-500">{centerLabel?.top || "Total"}</p>
-          <p className="text-lg font-semibold text-gray-900">
-            {currencySymbol}
-            {formatNumber(total)}
-          </p>
-          {centerLabel?.bottom ? (
-            <p className="text-xs text-gray-500 mt-1">{centerLabel.bottom}</p>
-          ) : null}
+              <Tooltip
+                content={<CustomTooltip currencySymbol={currencySymbol} />}
+              />
+              <Legend
+                verticalAlign="bottom"
+                height={44}
+                iconType="circle"
+                wrapperStyle={{ fontSize: 12, color: "rgba(0,0,0,0.65)" }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+
+          {/* Center label */}
+          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+            <p className="text-xs text-black/50">
+              {centerLabel?.top || "Total"}
+            </p>
+            <p className="text-xl font-extrabold tracking-tight text-gray-900">
+              {currencySymbol}
+              {formatNumber(total)}
+            </p>
+            {centerLabel?.bottom ? (
+              <p className="mt-1 text-xs text-black/50">{centerLabel.bottom}</p>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>
@@ -94,7 +166,6 @@ function DonutCard({ title, subtitle, data, currencySymbol, centerLabel }) {
 }
 
 export default function SummaryDonuts({ bundle, currencySymbol = "" }) {
-
   const byCatRaw = bundle?.expenses_by_category || [];
   const byCategory = byCatRaw
     .map((x) => ({
@@ -120,8 +191,13 @@ export default function SummaryDonuts({ bundle, currencySymbol = "" }) {
   const net = income - expenses;
   const netLabel = net >= 0 ? "Net positive" : "Net negative";
 
+  const incomeExpenseColors = [
+    "rgb(var(--color-primary))",
+    "rgb(var(--color-secondary))",
+  ];
+
   return (
-    <div className="w-full max-w-6xl mx-auto">
+    <div className="w-full max-w-4xl mx-auto">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <DonutCard
           title="Spending by Category"
@@ -129,6 +205,8 @@ export default function SummaryDonuts({ bundle, currencySymbol = "" }) {
           data={byCategoryTop}
           currencySymbol={currencySymbol}
           centerLabel={{ top: "Total spent", bottom: "Top categories + Other" }}
+          // categories palette (nice, consistent)
+          colors={CATEGORY_COLORS}
         />
 
         <DonutCard
@@ -140,6 +218,7 @@ export default function SummaryDonuts({ bundle, currencySymbol = "" }) {
             top: netLabel,
             bottom: `Net: ${currencySymbol}${formatNumber(net)}`,
           }}
+          colors={incomeExpenseColors}
         />
       </div>
     </div>

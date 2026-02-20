@@ -143,7 +143,7 @@ export default function CategoryModal({ d }) {
             className="rounded-2xl px-4 py-2 text-sm font-extrabold text-white shadow-md transition disabled:opacity-60 disabled:cursor-not-allowed"
             style={{
               background:
-                "linear-gradient(90deg, rgba(var(--color-primary), 0.95), rgba(var(--color-secondary), 0.95))",
+                "rgba(var(--color-primary)",
               boxShadow: "0 18px 45px rgba(0,0,0,0.18)",
             }}
             type="button"

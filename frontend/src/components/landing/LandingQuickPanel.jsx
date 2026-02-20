@@ -175,17 +175,18 @@ export default function LandingQuickPanel() {
               color: "white",
               maxWidth: { md: 420 },
               textShadow: "0 1px 12px rgba(0,0,0,0.25)",
+              gap: 2,
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center", gap: 0 }}>
               <Box
                 sx={{
-                  width: 120,
-                  height: 120,
+                  width: 64,
+                  height: 64,
                   backdropFilter: "blur(10px)",
                   display: "grid",
                   placeItems: "center",
-                  overflow: "hidden", // važno da logo ne izađe van
+                  overflow: "hidden",
                 }}
               >
                 <Image
@@ -472,8 +473,8 @@ export default function LandingQuickPanel() {
                       borderRadius: 3,
                       fontWeight: 900,
                       textTransform: "none",
-                      color: "rgb(var(--color-shadow))",
-                      background: "rgba(var(--color-secondary), 0.25)",
+                      color: "#ffffff",
+                      background: "rgb(var(--color-primary))",
                       boxShadow: "0 18px 65px rgba(0,0,0,0.28)",
                       overflow: "hidden",
                       position: "relative",
@@ -492,8 +493,8 @@ export default function LandingQuickPanel() {
                         width: "45%",
                         height: "100%",
                         transform: "skewX(-18deg)",
-                        background: "rgba(255,255,255,0.20)",
-                        opacity: 0,
+                        background: "rgb(var(--color-accent))",
+                        opacity: 20,
                         transition: "all 220ms ease",
                       },
                       "&:hover::after": {

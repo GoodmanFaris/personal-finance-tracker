@@ -88,7 +88,7 @@ export default function IncomeModal({ d }) {
             className="rounded-2xl px-4 py-2 text-sm font-extrabold text-white shadow-md transition disabled:opacity-60 disabled:cursor-not-allowed"
             style={{
               background:
-                "rgb(var(--color-secondary))",
+                "rgb(var(--color-primary))",
               boxShadow: "0 18px 45px rgba(0,0,0,0.18)",
             }}
             type="button"
