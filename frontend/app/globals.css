@@ -30,24 +30,28 @@ body {
   --color-secondary: 255 255 255;
   --color-thirdary: 252, 168, 40;
   --color-fourthary: 255 255 255;
+  --color-category: 255, 255, 255;
   --color-accent: 47 237 145;
   --color-background: 230 238 242;
   --color-shadow: 144 148 150;
   --color-text-white: 0 0 0;
   --color-text-dark: 17 28 33;
   --color-text-reverse: 10 10 85;
+  --color-text-reverse2: 0 0 0;
 }
 
 .dark {
   --color-primary: 24, 42, 71;
   --color-secondary: 33, 33, 33;
   --color-thirdary: 255, 247, 102;
-  --color-fourthary: 255 255 255;
+  --color-fourthary: 50, 50, 87;
+  --color-category: 15, 15, 36;
   --color-accent: 14 161 90;
   --color-background: 4 36 43;
   --color-shadow: 144 148 150;
   --color-text-white: 0 0 0;
   --color-text-dark: 17 28 33;
   --color-text-reverse: 180 180 225;
+  --color-text-reverse2: 255 235 255;
 }
 

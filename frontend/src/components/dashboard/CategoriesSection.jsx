@@ -2,7 +2,10 @@
 
 export default function CategoriesSection({ d, onOpenTransactions }) {
   return (
-    <section className="relative overflow-hidden rounded-xl border border-black/10 bg-white shadow-[0_18px_60px_rgba(0,0,0,0.08)] pb-4 mb-80">
+    <section
+      className="relative overflow-hidden rounded-xl border border-black/1 shadow-[0_18px_60px_rgba(0,0,0,0.08)] pb-4 mb-80"
+      style={{ background: "rgb(var(--color-fourthary))" }}
+    >
       {/* subtle top glow */}
       <div
         className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full blur-3xl opacity-30"
@@ -19,11 +22,17 @@ export default function CategoriesSection({ d, onOpenTransactions }) {
                 className="h-2 w-2 rounded-full"
                 style={{ background: "rgb(var(--color-secondary))" }}
               />
-              <h2 className="text-lg font-extrabold tracking-tight text-gray-900">
+              <h2
+                className="text-lg font-extrabold tracking-tight "
+                style={{ color: "rgb(var(--color-text-reverse))" }}
+              >
                 Categories
               </h2>
             </div>
-            <p className="mt-1 text-sm text-gray-600">
+            <p
+              className="mt-1 text-sm"
+              style={{ color: "rgb(var(--color-text-reverse))" }}
+            >
               Add, edit, delete — click a card to open transactions.
             </p>
           </div>
@@ -33,7 +42,7 @@ export default function CategoriesSection({ d, onOpenTransactions }) {
             className="inline-flex items-center justify-center rounded-2xl px-4 py-2.5 text-sm font-extrabold text-white shadow-md transition hover:brightness-[1.02] active:scale-[0.99]"
             style={{
               background:
-                "linear-gradient(90deg, rgba(var(--color-primary)), rgba(var(--color-secondary)))",
+                "linear-gradient(90deg, rgba(var(--color-primary)), rgba(var(--color-accent)))",
               boxShadow: "0 18px 45px rgba(0,0,0,0.10)",
             }}
           >
@@ -75,12 +84,13 @@ export default function CategoriesSection({ d, onOpenTransactions }) {
               <div
                 key={c.id}
                 onClick={() => onOpenTransactions?.(c)}
-                className="group relative cursor-pointer overflow-hidden rounded-3xl border border-black/10 bg-white p-4 transition hover:-translate-y-0.5 hover:shadow-[0_18px_55px_rgba(0,0,0,0.12)]"
+                className="group relative cursor-pointer overflow-hidden rounded-3xl p-4 transition hover:-translate-y-0.5 hover:shadow-[0_18px_55px_rgba(0,0,0,0.12)]"
+                style={{ background: "rgb(var(--color-category))", border: "1px solid rgb(var(--color-text-reverse))" }}
               >
                 {/* green rail */}
                 <div
                   className="absolute left-0 top-0 h-full w-1.5 opacity-80"
-                  style={{ background: "rgb(var(--color-secondary))" }}
+                  style={{ background: "rgb(var(--color-accent))" }}
                 />
                 {/* subtle hover wash */}
                 <div className="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100 bg-gradient-to-br from-black/[0.02] via-transparent to-transparent" />
@@ -88,13 +98,14 @@ export default function CategoriesSection({ d, onOpenTransactions }) {
                 <div className="relative flex items-start justify-between gap-3">
                   {/* Content */}
                   <div className="min-w-0">
-                    <p className="truncate text-base font-extrabold tracking-tight text-gray-900">
+                    <p className="truncate text-base font-extrabold tracking-tight"
+                       style={{ color: "rgb(var(--color-text-reverse2))" }}>
                       {c.name}
                     </p>
 
                     <p className="mt-1 text-sm text-gray-600">
                       Budget:{" "}
-                      <span className="font-extrabold text-gray-900">
+                      <span className="font-extrabold "style={{ color: "rgb(var(--color-text-reverse))", opacity: 0.8 }}>
                         {c.budget ?? c.default_budget ?? 0}
                       </span>
                     </p>
@@ -134,7 +145,7 @@ export default function CategoriesSection({ d, onOpenTransactions }) {
                     </button>
 
                     <button
-                      className="rounded-xl border border-red-200 bg-white px-3 py-1.5 text-sm font-extrabold text-red-700 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
+                      className="rounded-xl border border-red-200 bg-white px-3 py-1.5 text-sm font-extrabold text-red-800 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
                       disabled={d.categoryToDelete === c.id}
                       onClick={(e) => {
                         e.stopPropagation();
