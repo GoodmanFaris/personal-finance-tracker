@@ -21,7 +21,7 @@ export default function IncomeCard({ d }) {
       : "N/A";
 
   return (
-    <section className="relative w-full mt-15 overflow-hidden rounded-xl border border-white/15 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-600 text-white shadow-[0_18px_60px_rgba(0,0,0,0.25)] transition hover:shadow-[0_26px_85px_rgba(0,0,0,0.32)]">
+    <section className="relative w-full mt-15 overflow-hidden rounded-xl border border-white/15 bg-gradient-to-br  text-white shadow-[0_18px_60px_rgba(0,0,0,0.25)] transition hover:shadow-[0_26px_85px_rgba(0,0,0,0.32)]" style={{ background: "linear-gradient(135deg, rgb(var(--color-primary)) 0%, rgb(var(--color-primary) / 0.7) 100%)", boxShadow: "0 18px 60px rgba(var(--color-shadow), 0.25)" }}>
       {/* soft glow accents */}
       <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-28 -right-28 h-80 w-80 rounded-full bg-emerald-300/10 blur-3xl" />

@@ -4,7 +4,7 @@ export default function CategoriesSection({ d, onOpenTransactions }) {
   return (
     <section
       className="relative overflow-hidden rounded-xl border border-black/1 shadow-[0_18px_60px_rgba(0,0,0,0.08)] pb-4 mb-80"
-      style={{ background: "rgb(var(--color-fourthary))" }}
+      style={{ background: "rgb(var(--color-category))" }}
     >
       {/* subtle top glow */}
       <div
@@ -85,7 +85,7 @@ export default function CategoriesSection({ d, onOpenTransactions }) {
                 key={c.id}
                 onClick={() => onOpenTransactions?.(c)}
                 className="group relative cursor-pointer overflow-hidden rounded-3xl p-4 transition hover:-translate-y-0.5 hover:shadow-[0_18px_55px_rgba(0,0,0,0.12)]"
-                style={{ background: "rgb(var(--color-category))", border: "1px solid rgb(var(--color-text-reverse))" }}
+                style={{ background: "rgb(var(--color-fourthary))", border: "1px solid rgb(var(--color-text-reverse))" }}
               >
                 {/* green rail */}
                 <div
@@ -103,7 +103,7 @@ export default function CategoriesSection({ d, onOpenTransactions }) {
                       {c.name}
                     </p>
 
-                    <p className="mt-1 text-sm text-gray-600">
+                    <p className="mt-1 text-sm" style={{ color: "rgb(var(--color-text-reverse2))" }}>
                       Budget:{" "}
                       <span className="font-extrabold "style={{ color: "rgb(var(--color-text-reverse))", opacity: 0.8 }}>
                         {c.budget ?? c.default_budget ?? 0}

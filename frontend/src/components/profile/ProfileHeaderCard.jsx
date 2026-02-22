@@ -77,7 +77,7 @@ export default function ProfileHeaderCard() {
             onClick={handleLogout}
             className="
       rounded-lg
-      bg-red-600
+      bg-red-700
       px-5
       py-2
       text-sm
@@ -85,7 +85,7 @@ export default function ProfileHeaderCard() {
       text-white
       shadow-md
       transition
-      hover:bg-red-700
+      hover:bg-red-800
       hover:shadow-lg
       active:scale-95
     "

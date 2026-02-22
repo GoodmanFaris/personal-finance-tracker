@@ -16,15 +16,23 @@ export default function IncomeModal({ d }) {
         {/* Header / Titlebar (secondary) */}
         <div
           className="px-5 py-4 text-white"
-          style={{ background: "rgb(var(--color-secondary))" }}
+          style={{ background: "rgb(var(--color-secondary-modal))" }}
         >
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold text-white/80">Income</p>
-              <h3 className="text-lg font-extrabold tracking-tight">
+              <p
+                className="text-xs font-semibold text-white/80 "
+              >
+                Income
+              </p>
+              <h3
+                className="text-lg font-extrabold tracking-tight text-white"
+              >
                 Update income
               </h3>
-              <p className="mt-1 text-sm text-white/85">
+              <p
+                className="mt-1 text-sm text-white/70"
+              >
                 Month: <span className="font-semibold">{d.monthKey}</span>
               </p>
             </div>
@@ -87,8 +95,7 @@ export default function IncomeModal({ d }) {
             disabled={d.savingIncome}
             className="rounded-2xl px-4 py-2 text-sm font-extrabold text-white shadow-md transition disabled:opacity-60 disabled:cursor-not-allowed"
             style={{
-              background:
-                "rgb(var(--color-primary))",
+              background: "rgb(var(--color-primary))",
               boxShadow: "0 18px 45px rgba(0,0,0,0.18)",
             }}
             type="button"

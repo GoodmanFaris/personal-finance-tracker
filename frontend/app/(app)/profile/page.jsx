@@ -6,7 +6,7 @@ import ProfileStatsCard from "../../../src/components/profile/ProfileStatsCard";
 export default function ProfilePage() {
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gray-50 py-12 px-6 space-y-8">
+      <div className="min-h-screen py-12 px-6 space-y-8">
         <ProfileHeaderCard />
         <ProfileGeneralInfoCard />
         <ProfileStatsCard />

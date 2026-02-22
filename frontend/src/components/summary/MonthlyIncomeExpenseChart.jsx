@@ -30,24 +30,30 @@ function CustomTooltip({ active, payload, label, currencySymbol }) {
   const net = Number(income) - Number(expenses);
 
   return (
-    <div className="rounded-xl border border-black/10 bg-white/95 p-3 shadow-[0_18px_60px_rgba(0,0,0,0.18)] backdrop-blur">
-      <p className="text-xs text-black/50">{label}</p>
+    <div
+      className="rounded-xl border border-black/10  p-3 shadow-[0_18px_60px_rgba(0,0,0,0.18)] backdrop-blur"
+      style={{ background: "rgb(var(--color-category))" }}
+    >
+      <p className="text-xs" style={{ color: "rgb(var(--color-text-reverse2))" }}>{label}</p>
       <div className="mt-2 space-y-1 text-sm">
-        <p className="text-gray-900">
+        <p className="" style={{ color: "rgb(var(--color-text-reverse2))" }}>
           Income:{" "}
           <span className="font-extrabold">
             {currencySymbol}
             {formatNumber(income)}
           </span>
         </p>
-        <p className="text-gray-900">
+        <p className="" style={{ color: "rgb(var(--color-text-reverse2))" }}>
           Expenses:{" "}
           <span className="font-extrabold">
             {currencySymbol}
             {formatNumber(expenses)}
           </span>
         </p>
-        <p className="text-gray-900">
+        <p
+          className=""
+          style={{ color: "rgb(var(--color-text-reverse2))" }}
+        >
           Net:{" "}
           <span className="font-extrabold">
             {currencySymbol}
@@ -73,7 +79,10 @@ export default function MonthlyIncomeExpenseChart({
   }));
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto overflow-hidden rounded-xl border border-black/10 bg-white shadow-[0_18px_60px_rgba(0,0,0,0.08)]">
+    <div
+      className="relative w-full max-w-4xl mx-auto overflow-hidden rounded-xl border border-black/10  shadow-[0_18px_60px_rgba(0,0,0,0.08)]"
+      style={{ background: "rgb(var(--color-category))" }}
+    >
       {/* subtle top glow */}
       <div
         className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full blur-3xl opacity-25"
@@ -88,13 +97,19 @@ export default function MonthlyIncomeExpenseChart({
             <div className="flex items-center gap-2">
               <span
                 className="h-2 w-2 rounded-full"
-                style={{ background: "rgb(var(--color-secondary))" }}
+                style={{ background: "rgb(var(--color-accent))" }}
               />
-              <h3 className="text-lg font-extrabold tracking-tight text-gray-900">
+              <h3
+                className="text-lg font-extrabold tracking-tight"
+                style={{ color: "rgb(var(--color-text-reverse2))" }}
+              >
                 Income vs Expenses
               </h3>
             </div>
-            <p className="mt-1 text-sm text-gray-600">
+            <p
+              className="mt-1 text-sm"
+              style={{ color: "rgb(var(--color-text-reverse))", opacity: 0.9 }}
+            >
               Monthly totals in the selected period.
             </p>
           </div>
@@ -102,18 +117,24 @@ export default function MonthlyIncomeExpenseChart({
           {loading ? (
             <span className="text-sm text-gray-500">Loading…</span>
           ) : (
-            <div className="flex items-center gap-2 text-xs text-black/55">
+            <div
+              className="flex items-center gap-2 text-xs "
+              style={{ color: "rgb(var(--color-text-reverse2))" }}
+            >
               <span className="inline-flex items-center gap-2">
                 <span
                   className="h-2 w-2 rounded-full"
-                  style={{ background: "rgb(var(--color-primary))" }}
+                  style={{ background: "rgb(var(--color-text-reverse))" }}
                 />
                 Income
               </span>
               <span className="inline-flex items-center gap-2">
                 <span
                   className="h-2 w-2 rounded-full"
-                  style={{ background: "rgb(var(--color-secondary))" }}
+                  style={{
+                    background: "rgb(var(--color-accent))",
+                    color: "rgb(var(--color-text-reverse2))",
+                  }}
                 />
                 Expenses
               </span>
@@ -127,23 +148,33 @@ export default function MonthlyIncomeExpenseChart({
         <div className="h-[340px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData} barCategoryGap={18}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.10)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="rgb(var(--color-text-reverse2))" opacity={0.2} />
               <XAxis
                 dataKey="label"
                 tickMargin={10}
-                tick={{ fill: "rgba(0,0,0,0.55)", fontSize: 12 }}
-                axisLine={{ stroke: "rgba(0,0,0,0.10)" }}
-                tickLine={{ stroke: "rgba(0,0,0,0.10)" }}
+                tick={{ fill: "rgb(var(--color-text-reverse2))", fontSize: 12 }}
+                axisLine={{
+                  stroke: "rgb(var(--color-text-reverse2))",
+                  opacity: 0.5,
+                }}
+                tickLine={{ stroke: "rgb(var(--color-text-reverse2))", opacity: 0.5 }}
               />
               <YAxis
                 tickFormatter={(v) => formatNumber(v)}
                 width={72}
-                tick={{ fill: "rgba(0,0,0,0.55)", fontSize: 12 }}
-                axisLine={{ stroke: "rgba(0,0,0,0.10)" }}
-                tickLine={{ stroke: "rgba(0,0,0,0.10)" }}
+                tick={{ fill: "rgb(var(--color-text-reverse2))", fontSize: 12 }}
+                axisLine={{
+                  stroke: "rgb(var(--color-text-reverse2))",
+                  opacity: 0.5,
+                }}
+                tickLine={{
+                  stroke: "rgb(var(--color-text-reverse2))",
+                  opacity: 0.5,
+                }}
               />
               <Tooltip
                 content={<CustomTooltip currencySymbol={currencySymbol} />}
+                cursor={{ fill: "rgba(24,122,214,0.18)" }}
               />
               <Legend wrapperStyle={{ paddingTop: 6 }} iconType="circle" />
 
@@ -152,13 +183,13 @@ export default function MonthlyIncomeExpenseChart({
                 dataKey="income"
                 name="Income"
                 radius={[10, 10, 0, 0]}
-                fill="rgb(var(--color-primary))"
+                fill="rgba(24 122 214 / 0.9)"
               />
               <Bar
                 dataKey="expenses"
                 name="Expenses"
                 radius={[10, 10, 0, 0]}
-                fill="rgb(var(--color-secondary))"
+                fill="rgb(var(--color-accent))"
               />
             </BarChart>
           </ResponsiveContainer>

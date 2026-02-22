@@ -79,7 +79,7 @@ function DonutCard({
   data,
   currencySymbol,
   centerLabel,
-  colors, // optional array of colors for slices
+  colors, 
 }) {
   const total = data.reduce((s, x) => s + Number(x.value || 0), 0);
 
@@ -88,10 +88,13 @@ function DonutCard({
   }
 
   return (
-    <div className="relative w-full overflow-hidden rounded-xl border border-black/10 bg-white shadow-[0_18px_60px_rgba(0,0,0,0.08)]">
+    <div
+      className="relative w-full overflow-hidden rounded-xl border border-black/10 shadow-[0_18px_60px_rgba(0,0,0,0.10)]"
+      style={{ background: "rgb(var(--color-category))" }}
+    >
       <div
         className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full blur-3xl opacity-20"
-        style={{ background: "rgb(var(--color-secondary))" }}
+        style={{ background: "rgb(var(--color-accent))" }}
       />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/[0.02] via-transparent to-transparent" />
 
@@ -100,13 +103,21 @@ function DonutCard({
         <div className="flex items-center gap-2">
           <span
             className="h-2 w-2 rounded-full"
-            style={{ background: "rgb(var(--color-secondary))" }}
+            style={{ background: "rgb(var(--color-accent))" }}
           />
-          <h3 className="text-lg font-extrabold tracking-tight text-gray-900">
+          <h3
+            className="text-lg font-extrabold tracking-tight "
+            style={{ color: "rgb(var(--color-text-reverse2))" }}
+          >
             {title}
           </h3>
         </div>
-        <p className="mt-1 text-sm text-gray-600">{subtitle}</p>
+        <p
+          className="mt-1 text-sm "
+          style={{ color: "rgb(var(--color-text-reverse))" }}
+        >
+          {subtitle}
+        </p>
       </div>
 
       {/* Chart */}
@@ -121,7 +132,7 @@ function DonutCard({
                 innerRadius={78}
                 outerRadius={112}
                 paddingAngle={2}
-                stroke="rgba(0,0,0,0.06)"
+                stroke="rgba(0,0,0,0.16)"
               >
                 {data.map((_, i) => (
                   <Cell
@@ -141,22 +152,36 @@ function DonutCard({
                 verticalAlign="bottom"
                 height={44}
                 iconType="circle"
-                wrapperStyle={{ fontSize: 12, color: "rgba(0,0,0,0.65)" }}
+                wrapperStyle={{
+                  fontSize: 12,
+                  color: "rgb(var(--color-text-reverse))",
+                }}
               />
             </PieChart>
           </ResponsiveContainer>
 
           {/* Center label */}
-          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-            <p className="text-xs text-black/50">
+          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center -translate-y-5">
+            <p
+              className="text-xs"
+              style={{ color: "rgb(var(--color-text-reverse))" }}
+            >
               {centerLabel?.top || "Total"}
             </p>
-            <p className="text-xl font-extrabold tracking-tight text-gray-900">
+            <p
+              className="text-xl font-extrabold tracking-tight "
+              style={{ color: "rgb(var(--color-text-reverse2))" }}
+            >
               {currencySymbol}
               {formatNumber(total)}
             </p>
             {centerLabel?.bottom ? (
-              <p className="mt-1 text-xs text-black/50">{centerLabel.bottom}</p>
+              <p
+                className="mt-1 text-xs"
+                style={{ color: "rgb(var(--color-text-reverse))" }}
+              >
+                {centerLabel.bottom}
+              </p>
             ) : null}
           </div>
         </div>
@@ -191,10 +216,7 @@ export default function SummaryDonuts({ bundle, currencySymbol = "" }) {
   const net = income - expenses;
   const netLabel = net >= 0 ? "Net positive" : "Net negative";
 
-  const incomeExpenseColors = [
-    "rgb(var(--color-primary))",
-    "rgb(var(--color-secondary))",
-  ];
+  const incomeExpenseColors = ["rgb(24 122 214)", "rgb(var(--color-accent))"]; 
 
   return (
     <div className="w-full max-w-4xl mx-auto">

@@ -35,17 +35,17 @@ export default function CategoryTransactionsModal({
         {/* Header / Titlebar (secondary) */}
         <div
           className="relative px-5 py-4 text-white"
-          style={{ background: "rgb(var(--color-secondary))" }}
+          style={{ background: "rgb(var(--color-secondary-modal))" }}
         >
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
               <p className="text-xs font-semibold text-white/80">
                 Category transactions
               </p>
-              <h3 className="truncate text-lg font-extrabold tracking-tight">
+              <h3 className="truncate text-lg font-extrabold tracking-tight text-white">
                 {categoryName}
               </h3>
-              <p className="mt-1 text-sm text-white/85">
+              <p className="mt-1 text-sm text-white/70">
                 All transactions for this category.
               </p>
             </div>

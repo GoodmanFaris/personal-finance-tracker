@@ -27,7 +27,7 @@ export default function EditProfileModal({
         {/* Titlebar */}
         <div
           className="relative px-5 py-4 text-white"
-          style={{ background: "rgb(var(--color-secondary))" }}
+          style={{ background: "rgb(var(--color-secondary-modal))" }}
         >
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
