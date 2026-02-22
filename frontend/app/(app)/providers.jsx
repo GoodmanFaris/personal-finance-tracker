@@ -7,8 +7,14 @@ import { CssBaseline } from "@mui/material";
 export default function Providers({ children }) {
   return (
     <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-      <CssBaseline />
-      {children}
+      <ThemeProvider
+        attribute="class" 
+        defaultTheme="light" 
+        enableSystem
+      >
+        <CssBaseline />
+        {children}
+      </ThemeProvider>
     </AppRouterCacheProvider>
   );
 }

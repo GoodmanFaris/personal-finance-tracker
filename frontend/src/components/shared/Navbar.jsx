@@ -76,8 +76,8 @@ export default function Navbar() {
                   height: 48,
                   display: "grid",
                   placeItems: "center",
-                  position: "relative", 
-                  overflow: "hidden", 
+                  position: "relative",
+                  overflow: "hidden",
                   transition: "transform 180ms ease",
                   "&:hover": { transform: "rotate(-3deg) scale(1.02)" },
                 }}
@@ -315,12 +315,23 @@ export default function Navbar() {
         </List>
 
         <Box
+          component={NextLink}
+          href="/profile"
+          onClick={toggleDrawer(false)}
           sx={{
             mt: "auto",
             p: 2,
             display: "flex",
             alignItems: "center",
             gap: 1.5,
+            textDecoration: "none",
+            color: "inherit",
+            borderRadius: 2,
+            transition: "background 150ms ease, transform 150ms ease",
+            "&:hover": {
+              bgcolor: "rgba(var(--color-primary), 0.08)",
+              transform: "translateX(2px)",
+            },
           }}
         >
           <Avatar
@@ -332,24 +343,17 @@ export default function Navbar() {
           >
             O
           </Avatar>
+
           <Box sx={{ flex: 1 }}>
             <Typography sx={{ fontWeight: 800, lineHeight: 1.1 }}>
               Profile
             </Typography>
             <Typography sx={{ opacity: 0.75, fontSize: 13 }}>
-              Go to /profile
+              Go to profile
             </Typography>
           </Box>
-          <IconButton
-            onClick={() => {}}
-            sx={{
-              borderRadius: 2,
-              bgcolor: "rgba(var(--color-primary), 0.08)",
-              "&:hover": { bgcolor: "rgba(var(--color-primary), 0.14)" },
-            }}
-          >
-            <DarkModeOutlinedIcon />
-          </IconButton>
+
+          <span style={{ opacity: 0.5 }}>→</span>
         </Box>
       </Drawer>
     </>

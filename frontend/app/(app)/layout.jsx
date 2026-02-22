@@ -1,6 +1,7 @@
 import "../globals.css";
 import Navbar from "../../src/components/shared/Navbar";
 import Providers from "../(app)/providers";
+import Footer from "../../src/components/shared/Footer";
 
 export const metadata = {
   title: "Personal Finance Tracker",
@@ -18,13 +19,15 @@ export default function RootLayout({ children }) {
         />
 
         {/* ✅ Soft overlay (so content stays readable) */}
-        <div className="fixed inset-0 -z-10 bg-white/65 backdrop-blur-[2px]" />
+        <div className="fixed inset-0 -z-10 bg-white/55 backdrop-blur-[2px]" />
 
         {/* Optional subtle glow blobs */}
 
         <Providers>
           <Navbar />
           <main className="relative z-10">{children}</main>
+          <div className = "h-24" /> {/* Spacer to prevent footer overlap on small screens */}
+          <Footer />
         </Providers>
       </body>
     </html>
