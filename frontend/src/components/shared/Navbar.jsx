@@ -21,6 +21,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
+import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -30,7 +31,8 @@ const navLinks = [
 
 export default function Navbar() {
   const [open, setOpen] = React.useState(false);
-
+  const { theme, setTheme, resolvedTheme } = useTheme();
+  const isDark = (resolvedTheme || theme) === "dark";
   const toggleDrawer = (v) => () => setOpen(v);
 
   return (
@@ -154,20 +156,18 @@ export default function Navbar() {
           {/* RIGHT: Icons */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             {/* Dark/Light toggle (placeholder) */}
-            <Tooltip title="Theme (soon)">
+            <Tooltip title={isDark ? "Light mode" : "Dark mode"}>
               <IconButton
-                onClick={() => {}}
+                onClick={() => setTheme(isDark ? "light" : "dark")}
                 sx={{
                   color: "#fff",
                   borderRadius: 2,
-                  transition: "transform 150ms ease, background 150ms ease",
                   "&:hover": {
                     backgroundColor: "rgba(255,255,255,0.10)",
-                    transform: "translateY(-1px)",
                   },
                 }}
               >
-                <DarkModeOutlinedIcon />
+                {isDark ? <LightModeOutlinedIcon /> : <DarkModeOutlinedIcon />}
               </IconButton>
             </Tooltip>
 
