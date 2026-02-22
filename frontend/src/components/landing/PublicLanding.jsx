@@ -1,7 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { Button } from "@mui/material";
+import { Button, Box } from "@mui/material";
 
 export default function PublicLanding() {
   return (
@@ -9,13 +10,21 @@ export default function PublicLanding() {
       {/* Split background */}
       <div className="absolute inset-0 -z-10">
         <div
-          className="absolute inset-y-0 left-0 w-[70%]"
+          className="
+      absolute inset-y-0 left-0
+      w-full md:w-[70%]
+    "
           style={{ background: "rgb(var(--color-primary))" }}
         />
+
         <div
-          className="absolute inset-y-0 right-0 w-[30%]"
+          className="
+      absolute inset-y-0 right-0
+      w-0 md:w-[30%]
+    "
           style={{ background: "rgb(var(--color-secondary))" }}
         />
+
         {/* subtle dark overlay for contrast */}
         <div className="absolute inset-0 bg-black/10" />
       </div>
@@ -38,14 +47,25 @@ export default function PublicLanding() {
           {/* LEFT: Logo + Title + Copy + CTA */}
           <div className="max-w-xl">
             {/* Logo row */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 mt-18">
               {/* logo placeholder */}
-              <div
-                className="h-12 w-12 rounded-2xl border border-white/25 bg-white/15 backdrop-blur grid place-items-center"
-                aria-label="Logo placeholder"
+              <Box
+                sx={{
+                  width: 64,
+                  height: 64,
+                  backdropFilter: "blur(10px)",
+                  display: "grid",
+                  placeItems: "center",
+                  overflow: "hidden",
+                }}
               >
-                <span className="text-white font-black tracking-tight">BF</span>
-              </div>
+                <Image
+                  src="/logo.png"
+                  alt="BudgetFlo Logo"
+                  fill
+                  style={{ objectFit: "contain", padding: "1px" }}
+                />
+              </Box>
 
               <div className="leading-tight">
                 <p className="text-white/90 text-sm font-semibold tracking-wide">
@@ -57,7 +77,7 @@ export default function PublicLanding() {
               </div>
             </div>
 
-            <h1 className="mt-8 text-5xl sm:text-6xl font-extrabold tracking-tight text-white">
+            <h1 className="mt-4 text-5xl sm:text-6xl font-extrabold tracking-tight text-white">
               Track money,
               <span className="block text-white/90">stay in control.</span>
             </h1>
@@ -154,10 +174,19 @@ export default function PublicLanding() {
 
             {/* optional tagline on right (super minimal) */}
             <div className="absolute right-10 bottom-16 text-right">
-              <p className="text-white/90 font-semibold">
+              <p
+                className=" font-semibold"
+                style={{ color: "rgb(var(--color-text-reverse))" }}
+              >
                 Simple. Clean. Fast.
               </p>
-              <p className="text-white/65 text-sm">
+              <p
+                className="text-sm"
+                style={{
+                  color: "rgb(var(--color-text-reverse))",
+                  opacity: 0.75,
+                }}
+              >
                 Your finances, in one place.
               </p>
             </div>

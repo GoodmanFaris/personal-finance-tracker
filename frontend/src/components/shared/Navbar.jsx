@@ -3,6 +3,7 @@
 import * as React from "react";
 import Image from "next/image";
 import NextLink from "next/link";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import {
   AppBar,
   Toolbar,
@@ -22,6 +23,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import { useTheme } from "next-themes";
 
 const navLinks = [
   { label: "Home", href: "/" },
@@ -32,6 +34,11 @@ const navLinks = [
 export default function Navbar() {
   const [open, setOpen] = React.useState(false);
   const { theme, setTheme, resolvedTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
   const isDark = (resolvedTheme || theme) === "dark";
   const toggleDrawer = (v) => () => setOpen(v);
 
@@ -155,21 +162,42 @@ export default function Navbar() {
 
           {/* RIGHT: Icons */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            {/* Dark/Light toggle (placeholder) */}
-            <Tooltip title={isDark ? "Light mode" : "Dark mode"}>
+            {mounted ? (
+              <Tooltip title={isDark ? "Light mode" : "Dark mode"}>
+                <IconButton
+                  onClick={() => setTheme(isDark ? "light" : "dark")}
+                  sx={{
+                    color: "#fff",
+                    borderRadius: 2,
+                    transition: "transform 150ms ease, background 150ms ease",
+                    "&:hover": {
+                      backgroundColor: "rgba(255,255,255,0.10)",
+                      transform: "translateY(-1px)",
+                    },
+                  }}
+                  aria-label={isDark ? "Light mode" : "Dark mode"}
+                >
+                  {isDark ? (
+                    <LightModeOutlinedIcon />
+                  ) : (
+                    <DarkModeOutlinedIcon />
+                  )}
+                </IconButton>
+              </Tooltip>
+            ) : (
+              // placeholder da layout ne "skače"
               <IconButton
-                onClick={() => setTheme(isDark ? "light" : "dark")}
+                disabled
                 sx={{
                   color: "#fff",
                   borderRadius: 2,
-                  "&:hover": {
-                    backgroundColor: "rgba(255,255,255,0.10)",
-                  },
+                  opacity: 0.7,
                 }}
+                aria-label="Theme"
               >
-                {isDark ? <LightModeOutlinedIcon /> : <DarkModeOutlinedIcon />}
+                <DarkModeOutlinedIcon />
               </IconButton>
-            </Tooltip>
+            )}
 
             {/* Profile icon/avatar */}
             <Tooltip title="Profile">
@@ -177,24 +205,13 @@ export default function Navbar() {
                 component={NextLink}
                 href="/profile"
                 sx={{
-                  p: 0.5,
+                  color: "#fff",
                   borderRadius: 2,
                   transition: "transform 150ms ease",
                   "&:hover": { transform: "translateY(-1px)" },
                 }}
               >
-                <Avatar
-                  sx={{
-                    width: 34,
-                    height: 34,
-                    bgcolor: "rgb(var(--color-secondary))",
-                    color: "#fff",
-                    fontWeight: 800,
-                    border: "1px solid rgba(255,255,255,0.30)",
-                  }}
-                >
-                  O
-                </Avatar>
+                <AccountCircleOutlinedIcon sx={{ fontSize: 32 }} />
               </IconButton>
             </Tooltip>
 
@@ -228,7 +245,7 @@ export default function Navbar() {
           sx: {
             width: 320,
             bgcolor: "rgb(var(--color-background))",
-            color: "rgb(var(--color-text-dark))",
+            color: "rgb(var(--color-text-reverse))",
           },
         }}
       >
@@ -334,15 +351,18 @@ export default function Navbar() {
             },
           }}
         >
-          <Avatar
-            sx={{
-              bgcolor: "rgb(var(--color-secondary))",
-              color: "#fff",
-              fontWeight: 800,
-            }}
-          >
-            O
-          </Avatar>
+            <IconButton
+              component={NextLink}
+              href="/profile"
+              sx={{
+                color: "rgb(var(--color-text-reverse))",
+                borderRadius: 2,
+                transition: "transform 150ms ease",
+                "&:hover": { transform: "translateY(-1px)" },
+              }}
+            >
+              <AccountCircleOutlinedIcon sx={{ fontSize: 32 }} />
+            </IconButton>
 
           <Box sx={{ flex: 1 }}>
             <Typography sx={{ fontWeight: 800, lineHeight: 1.1 }}>

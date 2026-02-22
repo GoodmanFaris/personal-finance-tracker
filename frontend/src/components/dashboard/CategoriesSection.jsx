@@ -2,7 +2,7 @@
 
 export default function CategoriesSection({ d, onOpenTransactions }) {
   return (
-    <section className="relative overflow-hidden rounded-xl border border-black/10 bg-white shadow-[0_18px_60px_rgba(0,0,0,0.08)]">
+    <section className="relative overflow-hidden rounded-xl border border-black/10 bg-white shadow-[0_18px_60px_rgba(0,0,0,0.08)] pb-4 mb-80">
       {/* subtle top glow */}
       <div
         className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full blur-3xl opacity-30"

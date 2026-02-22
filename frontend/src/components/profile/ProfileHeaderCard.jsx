@@ -1,9 +1,18 @@
 "use client";
 
 import useProfileData from "../../hooks/useProfileData";
+import useAuthData from "../../hooks/useAuthData";
+import { useRouter } from "next/navigation";
 
 export default function ProfileHeaderCard() {
   const { profileData, loading } = useProfileData();
+  const { logout } = useAuthData();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push("/"); 
+  };
 
   if (loading) {
     return (
@@ -56,11 +65,33 @@ export default function ProfileHeaderCard() {
         </div>
 
         {/* RIGHT optional info */}
-        <div className="hidden sm:flex flex-col items-end text-right">
-          <p className="text-xs text-white/70 uppercase tracking-wider">
-            Account Status
-          </p>
-          <p className="mt-1 text-sm font-semibold text-white">Active</p>
+        <div className="hidden sm:flex flex-col items-end text-right gap-3">
+          <div>
+            <p className="text-xs text-white/70 uppercase tracking-wider">
+              Account Status
+            </p>
+            <p className="mt-1 text-sm font-semibold text-white">Active</p>
+          </div>
+
+          <button
+            onClick={handleLogout}
+            className="
+      rounded-lg
+      bg-red-600
+      px-5
+      py-2
+      text-sm
+      font-semibold
+      text-white
+      shadow-md
+      transition
+      hover:bg-red-700
+      hover:shadow-lg
+      active:scale-95
+    "
+          >
+            Log out
+          </button>
         </div>
       </div>
     </div>

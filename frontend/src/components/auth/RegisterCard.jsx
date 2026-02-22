@@ -95,7 +95,7 @@ export default function RegisterCard({
           className="w-full rounded-2xl px-4 py-3 text-sm font-extrabold text-white shadow-md transition disabled:opacity-60"
           style={{
             background:
-              "rgba(var(--color-secondary))",
+              "rgb(var(--color-accent))",
             boxShadow: "0 18px 45px rgba(0,0,0,0.18)",
           }}
         >

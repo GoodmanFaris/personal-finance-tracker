@@ -78,7 +78,7 @@ export default function LandingQuickPanel() {
       component="main"
       sx={{ position: "relative", minHeight: "100vh", overflow: "hidden" }}
     >
-      {/* Split background 30 / 70 (LEFT blue, RIGHT green) */}
+      {/* Split background 40 / 60 (LEFT blue, RIGHT green) */}
       <Box sx={{ position: "absolute", inset: 0, zIndex: -10 }}>
         <Box
           sx={{
@@ -86,20 +86,23 @@ export default function LandingQuickPanel() {
             top: 0,
             bottom: 0,
             left: 0,
-            width: "40%",
+            width: { xs: "100%", md: "40%" }, 
+            height: "150%",
             backgroundColor: "rgb(var(--color-primary))",
           }}
         />
+
         <Box
           sx={{
             position: "absolute",
             top: 0,
             bottom: 0,
             right: 0,
-            width: "60%",
+            width: { xs: "0%", md: "60%" }, // 🔥 responsive
             backgroundColor: "rgb(var(--color-secondary))",
           }}
         />
+
         <Box
           sx={{
             position: "absolute",
@@ -212,7 +215,7 @@ export default function LandingQuickPanel() {
             <Typography
               variant="h3"
               sx={{
-                mt: 0,
+                mt: 3,
                 fontWeight: 900,
                 letterSpacing: "-0.03em",
                 lineHeight: 1.05,
@@ -306,6 +309,7 @@ export default function LandingQuickPanel() {
                   position: "relative",
                   overflow: "hidden",
                   ml: { xs: 0, md: 8 },
+                  mb: { xs: 4, md: 0 },
                 }}
               >
                 {/* Soft glass glow behind card */}
@@ -549,11 +553,11 @@ export default function LandingQuickPanel() {
                           width: 6,
                           height: 6,
                           borderRadius: 999,
-                          backgroundColor: "rgb(var(--color-secondary))",
+                          backgroundColor: "rgb(var(--color-thirdary))",
                         }}
                       />
                       <Typography
-                        sx={{ fontSize: 12, color: "rgba(0,0,0,0.45)" }}
+                        sx={{ fontSize: 12, color: "rgb(a(0,0,0,0.45))" }}
                       >
                         Fast add
                       </Typography>
