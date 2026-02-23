@@ -86,7 +86,7 @@ export default function LandingQuickPanel() {
             top: 0,
             bottom: 0,
             left: 0,
-            width: { xs: "100%", md: "40%" }, 
+            width: { xs: "100%", md: "40%" },
             height: "150%",
             backgroundColor: "rgb(var(--color-primary))",
           }}
@@ -303,7 +303,7 @@ export default function LandingQuickPanel() {
                   borderRadius: 4,
                   p: { xs: 2.5, sm: 3 },
                   border: "1px solid rgba(255,255,255,0.28)",
-                  backgroundColor: "rgba(255,255,255,0.86)",
+                  backgroundColor: "rgb(var(--color-category))",
                   backdropFilter: "blur(16px)",
                   boxShadow: "0 24px 70px rgba(var(--color-shadow), 0.25)",
                   position: "relative",
@@ -341,7 +341,7 @@ export default function LandingQuickPanel() {
                         fontSize: { xs: 22, sm: 28 },
                         fontWeight: 900,
                         letterSpacing: "-0.02em",
-                        color: "rgb(var(--color-text-dark))",
+                        color: "rgb(var(--color-text-reverse2))",
                       }}
                     >
                       Quick Add
@@ -350,7 +350,7 @@ export default function LandingQuickPanel() {
                       sx={{
                         mt: 0.5,
                         fontSize: { xs: 13, sm: 15 },
-                        color: "rgba(0,0,0,0.60)",
+                        color: "rgb(var(--color-text-reverse))",
                       }}
                     >
                       Don't have much time? Quickly add a transaction below.
@@ -376,7 +376,7 @@ export default function LandingQuickPanel() {
                       sx={{
                         fontSize: 12,
                         fontWeight: 700,
-                        color: "rgb(var(--color-text-dark))",
+                        color: "rgb(var(--color-text-reverse2))",
                       }}
                     >
                       Logged in
@@ -403,7 +403,10 @@ export default function LandingQuickPanel() {
                       startAdornment: (
                         <InputAdornment position="start">
                           <Typography
-                            sx={{ fontWeight: 800, color: "rgba(0,0,0,0.45)" }}
+                            sx={{
+                              fontWeight: 800,
+                              color: "rgb(var(--color-text-reverse2))",
+                            }}
                           >
                             {currencySymbol}
                           </Typography>
@@ -413,7 +416,32 @@ export default function LandingQuickPanel() {
                     sx={{
                       "& .MuiOutlinedInput-root": {
                         borderRadius: 3,
-                        backgroundColor: "rgba(255,255,255,0.70)",
+                        backgroundColor: "rgb(var(--color-category))",
+
+                        "& .MuiInputBase-input": {
+                          color: "rgb(var(--color-text-reverse2))",
+                        },
+
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "rgb(var(--color-text-reverse2) / 0.25)",
+                        },
+
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "rgb(var(--color-text-reverse2) / 0.5)",
+                        },
+
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "rgb(var(--color-accent))",
+                          borderWidth: "2px",
+                        },
+                      },
+
+                      "& .MuiInputLabel-root": {
+                        color: "rgb(var(--color-text-reverse))",
+                      },
+
+                      "& .MuiInputLabel-root.Mui-focused": {
+                        color: "rgb(var(--color-text-reverse2))",
                       },
                     }}
                   />
@@ -423,7 +451,32 @@ export default function LandingQuickPanel() {
                     sx={{
                       "& .MuiOutlinedInput-root": {
                         borderRadius: 3,
-                        backgroundColor: "rgba(255,255,255,0.70)",
+                        backgroundColor: "rgb(var(--color-category))",
+
+                        "& .MuiInputBase-input": {
+                          color: "rgb(var(--color-text-reverse2))",
+                        },
+
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "rgb(var(--color-text-reverse2) / 0.25)",
+                        },
+
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "rgb(var(--color-text-reverse2) / 0.5)",
+                        },
+
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "rgb(var(--color-accent))",
+                          borderWidth: "2px",
+                        },
+                      },
+
+                      "& .MuiInputLabel-root": {
+                        color: "rgb(var(--color-text-reverse))",
+                      },
+
+                      "& .MuiInputLabel-root.Mui-focused": {
+                        color: "rgb(var(--color-text-reverse2))",
                       },
                     }}
                   >
@@ -445,7 +498,11 @@ export default function LandingQuickPanel() {
                     </Select>
 
                     <Typography
-                      sx={{ mt: 1, fontSize: 12, color: "rgba(0,0,0,0.45)" }}
+                      sx={{
+                        mt: 1,
+                        fontSize: 12,
+                        color: "rgb(var(--color-text-reverse))",
+                      }}
                     >
                       Tip: choose the category first, then add amount.
                     </Typography>
@@ -462,7 +519,32 @@ export default function LandingQuickPanel() {
                     sx={{
                       "& .MuiOutlinedInput-root": {
                         borderRadius: 3,
-                        backgroundColor: "rgba(255,255,255,0.70)",
+                        backgroundColor: "rgb(var(--color-category))",
+
+                        "& .MuiInputBase-input": {
+                          color: "rgb(var(--color-text-reverse2))",
+                        },
+
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "rgb(var(--color-text-reverse2) / 0.25)",
+                        },
+
+                        "&:hover .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "rgb(var(--color-text-reverse2) / 0.5)",
+                        },
+
+                        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          borderColor: "rgb(var(--color-accent))",
+                          borderWidth: "2px",
+                        },
+                      },
+
+                      "& .MuiInputLabel-root": {
+                        color: "rgb(var(--color-text-reverse))",
+                      },
+
+                      "& .MuiInputLabel-root.Mui-focused": {
+                        color: "rgb(var(--color-text-reverse2))",
                       },
                     }}
                   />
@@ -478,7 +560,7 @@ export default function LandingQuickPanel() {
                       fontWeight: 900,
                       textTransform: "none",
                       color: "#ffffff",
-                      background: "rgb(var(--color-primary))",
+                      background: "rgba(24 122 214 / 0.70)",
                       boxShadow: "0 18px 65px rgba(0,0,0,0.28)",
                       overflow: "hidden",
                       position: "relative",
@@ -531,11 +613,14 @@ export default function LandingQuickPanel() {
                           width: 6,
                           height: 6,
                           borderRadius: 999,
-                          backgroundColor: "rgb(var(--color-primary))",
+                          backgroundColor: "rgb(24 122 214)",
                         }}
                       />
                       <Typography
-                        sx={{ fontSize: 12, color: "rgba(0,0,0,0.45)" }}
+                        sx={{
+                          fontSize: 12,
+                          color: "rgb(var(--color-text-reverse))",
+                        }}
                       >
                         Minimal UI
                       </Typography>
@@ -557,7 +642,10 @@ export default function LandingQuickPanel() {
                         }}
                       />
                       <Typography
-                        sx={{ fontSize: 12, color: "rgb(a(0,0,0,0.45))" }}
+                        sx={{
+                          fontSize: 12,
+                          color: "rgb(var(--color-text-reverse))",
+                        }}
                       >
                         Fast add
                       </Typography>

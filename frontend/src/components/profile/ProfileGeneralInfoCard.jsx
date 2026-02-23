@@ -85,7 +85,7 @@ export default function ProfileGeneralInfoCard() {
             <div className="flex items-center gap-2">
               <span
                 className="h-2 w-2 rounded-full"
-                style={{ background: "rgb(var(--color-secondary))" }}
+                style={{ background: "rgb(var(--color-accent))" }}
               />
               <h3
                 className="text-lg font-extrabold tracking-tight"

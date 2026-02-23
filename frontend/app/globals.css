@@ -39,6 +39,7 @@ body {
   --color-text-reverse: 10 10 85;
   --color-text-reverse2: 0 0 0;
   --color-secondary-modal: 24 122 214;
+  --color-background-reverse: 255 255 255;
 }
 
 .dark {
@@ -55,5 +56,6 @@ body {
   --color-text-reverse: 180 180 225;
   --color-text-reverse2: 255 235 255;
   --color-secondary-modal: 33, 33, 33;
+  --color-background-reverse: 0 0 0;
 }
 

@@ -17,7 +17,7 @@ export default function ProfileStatsCard() {
   if (loading) {
     return (
       <div className="relative w-full max-w-4xl mx-auto overflow-hidden rounded-3xl border border-black/10 bg-white p-8 shadow-[0_18px_60px_rgba(0,0,0,0.08)]">
-        <p className="text-gray-500 text-sm">Loading stats...</p>
+        <p className=" text-sm" style={{ color: "rgb(var(--color-text-reverse))" }}>Loading stats...</p>
       </div>
     );
   }
@@ -32,30 +32,30 @@ export default function ProfileStatsCard() {
   const Stat = ({ label, value, accent = "none" }) => {
     const accentDot =
       accent === "primary"
-        ? "rgb(var(--color-primary))"
+        ? "rgb(24 122 214)"
         : accent === "secondary"
-          ? "rgb(var(--color-secondary))"
+          ? "rgb(var(--color-text-reverse2)/0.65)"
           : accent === "danger"
             ? "rgba(239, 68, 68, 0.95)"
             : "rgba(0,0,0,0.25)";
 
     const valueColor =
       accent === "primary"
-        ? "rgb(var(--color-primary))"
+        ? "rgb(24 122 214)"
         : accent === "secondary"
-          ? "rgb(var(--color-secondary))"
+          ? "rgb(var(--color-text-reverse2))"
           : accent === "danger"
             ? "rgba(220, 38, 38, 0.95)"
-            : "rgb(17, 24, 39)"; // gray-900
+            : "rgb(17, 24, 39)";
 
     return (
-      <div className="rounded-3xl border border-black/10 bg-white/70 p-5 shadow-sm transition hover:bg-white">
+      <div className="rounded-3xl border border-black/10  p-5 shadow-sm transition hover:bg-white" style={{ background: "rgb(var(--color-fourthary))" }}>
         <div className="flex items-center justify-center gap-2">
           <span
             className="h-2 w-2 rounded-full"
             style={{ background: accentDot }}
           />
-          <p className="text-xs font-semibold text-black/45 uppercase tracking-wider">
+          <p className="text-xs font-semibold  uppercase tracking-wider" style={{ color: "rgb(var(--color-text-reverse))" }}>
             {label}
           </p>
         </div>
@@ -70,7 +70,7 @@ export default function ProfileStatsCard() {
   };
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto overflow-hidden rounded-3xl border border-black/10 bg-white shadow-[0_18px_60px_rgba(0,0,0,0.08)]">
+    <div className="relative w-full max-w-4xl mx-auto overflow-hidden rounded-3xl border border-black/10 shadow-[0_18px_60px_rgba(0,0,0,0.08)]" style={{ background: "rgb(var(--color-category))" }}>
       {/* subtle glow */}
       <div
         className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full blur-3xl opacity-20"
@@ -79,17 +79,17 @@ export default function ProfileStatsCard() {
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/[0.02] via-transparent to-transparent" />
 
       {/* Header */}
-      <div className="relative border-b border-black/10 px-5 py-4 sm:px-6">
+      <div className="relative border-b  px-5 py-4 sm:px-6" style={{ borderColor: "rgb(var(--color-text-reverse) / 0.15)" }}>
         <div className="flex items-center gap-2">
           <span
             className="h-2 w-2 rounded-full"
-            style={{ background: "rgb(var(--color-secondary))" }}
+            style={{ background: "rgb(var(--color-accent))" }}
           />
-          <h3 className="text-lg font-extrabold tracking-tight text-gray-900">
+          <h3 className="text-lg font-extrabold tracking-tight" style={{ color: "rgb(var(--color-text-reverse2))" }}>
             Account Statistics
           </h3>
         </div>
-        <p className="mt-1 text-sm text-gray-600">
+        <p className="mt-1 text-sm " style={{ color: "rgb(var(--color-text-reverse))" }}>
           Quick overview of your account usage and totals.
         </p>
       </div>
