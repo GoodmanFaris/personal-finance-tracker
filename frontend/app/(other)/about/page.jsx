@@ -91,9 +91,8 @@ export default function AboutPage() {
                 Contact
               </Link>
 
-              {/* zamijeni href kad dodaš repo */}
               <a
-                href="#"
+                href="https://github.com/GoodmanFaris/personal-finance-tracker" target="_blank"
                 className="inline-flex items-center justify-center rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-extrabold text-white hover:bg-white/15 transition"
               >
                 GitHub (repo)

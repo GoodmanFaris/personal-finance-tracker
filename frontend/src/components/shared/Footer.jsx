@@ -64,7 +64,7 @@ export default function Footer() {
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <IconButton
               component="a"
-              href="https://github.com/your-repo-link"
+              href="https://github.com/GoodmanFaris/personal-finance-tracker"
               target="_blank"
               rel="noopener noreferrer"
               sx={{

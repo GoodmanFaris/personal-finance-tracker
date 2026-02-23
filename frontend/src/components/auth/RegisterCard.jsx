@@ -112,6 +112,7 @@ export default function RegisterCard({
       <button
         type="button"
         onClick={() => alert("Google signup not wired yet. Coming soon.")}
+        
         className="w-full rounded-2xl border border-black/10 bg-white/70 px-4 py-3 text-sm font-extrabold text-gray-900 hover:bg-white transition"
       >
         Sign up with Google
