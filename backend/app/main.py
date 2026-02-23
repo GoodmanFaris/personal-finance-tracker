@@ -20,6 +20,9 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://personal-finance-tracker-ecru-kappa.vercel.app/",
+    "https://BudgetFlo.online,"
+
 ]
     
 app.add_middleware(
