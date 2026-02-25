@@ -18,5 +18,5 @@ export default function GoogleCallbackPage() {
     }
   }, [searchParams, router]);
 
-  return <html><body><p>Signing you in...</p></body></html>;
+  return <p>Signing you in...</p>;
 }
