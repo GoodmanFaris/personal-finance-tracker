@@ -2,15 +2,15 @@
 
 BudgetFlo is an open-source online personal finance tracker designed to help individuals manage their income, expenses, and financial insights through a clean and structured interface.
 
-Live Website: https://budgetflo.online (live 21.02.2026)  
-Current Version: v1
+Live Website: https://budgetflo.online 
+Current Version: v1.0.1
 
 
 # Project Overview
 
 BudgetFlo provides a secure and scalable platform where users can:
 
-- Register and authenticate securely
+- Register and authenticate securely including Google OAuth
 - Track income and expenses
 - Organize transactions by categories
 - Monitor monthly balances
@@ -159,4 +159,4 @@ To contribute:
 Version 2 (v2) will include:
 
 - More advanced personalization options
-- Google OAuth authentication integration
+- First AI agents for insight
