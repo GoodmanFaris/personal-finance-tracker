@@ -94,8 +94,7 @@ export default function RegisterCard({
           disabled={submitting}
           className="w-full rounded-2xl px-4 py-3 text-sm font-extrabold text-white shadow-md transition disabled:opacity-60"
           style={{
-            background:
-              "rgb(var(--color-accent))",
+            background: "rgb(var(--color-accent))",
             boxShadow: "0 18px 45px rgba(0,0,0,0.18)",
           }}
         >
@@ -111,8 +110,10 @@ export default function RegisterCard({
 
       <button
         type="button"
-        onClick={() => alert("Google signup not wired yet. Coming soon.")}
-        
+        onClick={() => {
+          window.location.href =
+            "https://personal-finance-tracker-production-6948.up.railway.app/auth/google/start";
+        }}
         className="w-full rounded-2xl border border-black/10 bg-white/70 px-4 py-3 text-sm font-extrabold text-gray-900 hover:bg-white transition"
       >
         Sign up with Google

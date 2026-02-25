@@ -175,6 +175,12 @@ async def google_callback(
     service = AuthService(session)
     access_token = service.create_access_token(user=user)
 
-    resp = JSONResponse({"access_token": access_token, "token_type": "bearer"})
-    resp.delete_cookie("oauth_state", path="/")
-    return resp
+    from fastapi.responses import RedirectResponse
+
+    frontend_url = os.getenv("FRONTEND_URL")
+
+    redirect_url = f"{frontend_url}/auth/google/callback?token={access_token}"
+
+    response = RedirectResponse(url=redirect_url, status_code=302)
+    response.delete_cookie("oauth_state", path="/")
+    return response

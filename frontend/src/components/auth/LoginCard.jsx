@@ -76,8 +76,7 @@ export default function LoginCard({
           disabled={submitting}
           className="relative w-full overflow-hidden rounded-2xl px-4 py-3 text-sm font-extrabold text-green shadow-md transition disabled:opacity-80"
           style={{
-            background:
-              "rgb(var(--color-accent))",
+            background: "rgb(var(--color-accent))",
             boxShadow: "0 18px 45px rgba(0,0,0,0.18)",
           }}
         >
@@ -94,8 +93,10 @@ export default function LoginCard({
 
       <button
         type="button"
-        onClick={() => alert("Google login not wired yet. Coming soon.")}
-        
+        onClick={() => {
+          window.location.href =
+            "https://personal-finance-tracker-production-6948.up.railway.app/auth/google/start";
+        }}
         className="w-full rounded-2xl border border-black/10 bg-white/70 px-4 py-3 text-sm font-extrabold text-gray-900 hover:bg-white transition"
       >
         Sign in with Google
