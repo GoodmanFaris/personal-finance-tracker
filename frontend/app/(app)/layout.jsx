@@ -11,7 +11,13 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      rel="icon"
+      type="image/png"
+      href="/favicon.png"
+    >
       <body className="relative min-h-screen overflow-x-hidden text-gray-900">
         <Providers>
           <BackgroundLayer />
