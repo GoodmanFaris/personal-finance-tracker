@@ -8,6 +8,8 @@ import { useMemo, useCallback } from "react";
 import { Box, Slider, Typography, Chip } from "@mui/material";
 import useProfileData from "../../hooks/useProfileData";
 
+import { Sparkles } from "lucide-react";
+
 function ymToIndex(ym) {
   const [y, m] = ym.split("-").map(Number);
   return y * 12 + (m - 1);
@@ -179,20 +181,22 @@ export default function SummaryPeriodPicker({
       <Box
         sx={{
           position: "absolute",
-          bottom: 14,
-          left: 14,
+          bottom: 16,
+          right: 16,
           zIndex: 5,
         }}
       >
         <button
           onClick={() => setAiOpen(true)}
           disabled={!ready || !startMonth || !endMonth}
-          className="rounded-xl px-3 py-2 text-xs font-extrabold text-white shadow-md transition disabled:opacity-60 disabled:cursor-not-allowed hover:scale-[1.02]"
+          className="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-extrabold text-white shadow-lg transition hover:scale-[1.03] disabled:opacity-60 disabled:cursor-not-allowed"
           style={{
-            background: "rgb(var(--color-secondary-modal))",
+            background: "linear-gradient(135deg, #7c3aed 0%, #ec4899 100%)",
+            boxShadow: "0 12px 40px rgba(124,58,237,0.35)",
           }}
           type="button"
         >
+          <Sparkles size={16} />
           AI Summary
         </button>
       </Box>

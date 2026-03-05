@@ -16,7 +16,9 @@ export default function AIModal({ open, insight, loading, error, onClose }) {
         {/* Header */}
         <div
           className="relative px-5 py-4 text-white"
-          style={{ background: "rgb(var(--color-secondary-modal))" }}
+          style={{
+            background: "linear-gradient(135deg, #7c3aed 0%, #ec4899 100%)",
+          }}
         >
           <div className="flex items-start justify-between gap-4">
             <div>
