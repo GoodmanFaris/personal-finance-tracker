@@ -13,6 +13,7 @@ from app.routes import balance
 from app.routes import auth
 from app.routes import user
 from app.routes import contact
+from app.routes import ai
 
 
 app = FastAPI()
@@ -47,5 +48,5 @@ app.include_router(balance.router)
 app.include_router(auth.router)
 app.include_router(user.router)
 app.include_router(summary.router)
-
+app.include_router(ai.router)
 app.include_router(contact.router)
