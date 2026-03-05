@@ -7,6 +7,7 @@ class CategoryCreate(BaseModel):
     budget: Optional[float] = Field(default=0, ge=0)
     description: Optional[str] = Field(default="", max_length=255)
     active: bool = True
+    month: Optional[str] = None
 
 class CategoryRead(BaseModel):
     id: int
@@ -15,10 +16,12 @@ class CategoryRead(BaseModel):
     budget: Optional[float]
     description: Optional[str]
     active: bool
-
+    month: Optional[str] = None
+    
 class CategoryUpdate(BaseModel):
     name: Optional[str] = Field(default=None, min_length=1, max_length=100)
     default_budget: Optional[float] = Field(default=None, ge=0)
     budget: Optional[float] = Field(default=None, ge=0)
     description: Optional[str] = Field(default=None, max_length=255)
     active: Optional[bool] = None
+    month: Optional[str] = None

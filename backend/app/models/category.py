@@ -8,6 +8,7 @@ class Category(SQLModel, table=True):
     default_budget: float = 0.0
     budget: Optional[float] = 0.0
     description: Optional[str] = ""
+    month: Optional[str] = Field(index=True)
     active: bool = True
 
     

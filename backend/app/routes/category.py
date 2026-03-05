@@ -1,3 +1,5 @@
+from datetime import date
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
 
@@ -6,6 +8,7 @@ from app.services.category import CategoryService
 from app.schemas.category import CategoryCreate, CategoryRead, CategoryUpdate
 from app.dependecies.auth import get_current_user
 from app.schemas.user import UserPublic
+from app.core.formating import date_to_str_month
 
 router = APIRouter(prefix="/category", tags=["category"])
 
