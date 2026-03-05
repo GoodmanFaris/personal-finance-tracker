@@ -1,5 +1,3 @@
-# app/repositories/ai_cache.py
-
 from __future__ import annotations
 
 from typing import Optional
