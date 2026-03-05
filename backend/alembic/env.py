@@ -19,6 +19,7 @@ from app.models.income import Income
 from app.models.category import Category
 from app.models.transaction import Transaction
 from app.models.balance import Balance
+from app.models.ai_insight import AIInsight
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

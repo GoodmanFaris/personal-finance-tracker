@@ -1,5 +1,9 @@
 "use client";
 
+import { useState } from "react";
+import useAIData from "../../hooks/useAIData";
+import AIModal from "../../components/summary/AIModal"; 
+
 import { useMemo, useCallback } from "react";
 import { Box, Slider, Typography, Chip } from "@mui/material";
 import useProfileData from "../../hooks/useProfileData";
@@ -28,6 +32,14 @@ export default function SummaryPeriodPicker({
   onChangeEnd,
 }) {
   const { profileData, loading } = useProfileData();
+
+  const [aiOpen, setAiOpen] = useState(false);
+
+  const {
+    data,
+    loading: aiLoading,
+    error,
+  } = useAIData(startMonth, endMonth, aiOpen);
 
   const createdAt = profileData?.created_at?.slice(0, 7) || "1970-01";
   const currentDate = new Date().toISOString().slice(0, 7);
@@ -164,6 +176,33 @@ export default function SummaryPeriodPicker({
           </Box>
         </Box>
       </Box>
+      <Box
+        sx={{
+          position: "absolute",
+          bottom: 14,
+          left: 14,
+          zIndex: 5,
+        }}
+      >
+        <button
+          onClick={() => setAiOpen(true)}
+          disabled={!ready || !startMonth || !endMonth}
+          className="rounded-xl px-3 py-2 text-xs font-extrabold text-white shadow-md transition disabled:opacity-60 disabled:cursor-not-allowed hover:scale-[1.02]"
+          style={{
+            background: "rgb(var(--color-secondary-modal))",
+          }}
+          type="button"
+        >
+          AI Summary
+        </button>
+      </Box>
+      <AIModal
+        open={aiOpen}
+        insight={data?.insight}
+        loading={aiLoading}
+        error={error}
+        onClose={() => setAiOpen(false)}
+      />
     </Box>
   );
 }
